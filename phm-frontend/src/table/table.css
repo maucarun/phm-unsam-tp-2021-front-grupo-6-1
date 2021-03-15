@@ -1,3 +1,15 @@
-.chkcbx {
-    border-radius: 1rem;
+.buttonsdiv {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.buttons {
+    display: flex;
+    width: 30%;
+    justify-content: space-evenly;
+    margin-top: 1em;
+}
+
+.chckbx {
+    border-radius: 1em;
 }
