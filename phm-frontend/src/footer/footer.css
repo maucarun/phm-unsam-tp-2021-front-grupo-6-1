@@ -1,0 +1,21 @@
+.main-footer {
+    background-color: #006064;
+    color: white;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+    
+    .footer {
+      padding: 1rem;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    
+    .footer_texto {
+      margin-left: 1rem;
+    }
