@@ -8,6 +8,17 @@ let respuestas = [{descripcion: "respuesta 1", elegida: false}, {descripcion: "r
                     {descripcion: "respuesta 5", elegida: false}, {descripcion: "respuesta 6", elegida: false}]
 
 const Table = () => {
+    const [elegida, setElegida] = useState(false)
+    const seleccionar = (respuesta) => {
+        return(
+            <Checkbox onClick={() => setElegida(!elegida)} checked={elegida}></Checkbox>
+            )
+        }
+
+    const setChecked = () => {
+
+    }
+
     return(
         <div className="">
             <DataTable value={respuestas} autoLayout={true}>
@@ -18,13 +29,3 @@ const Table = () => {
     )
 }
 export default Table
-
-const seleccionar = (respuesta) => {
-    return(
-        <Checkbox onChange={event => setChecked(event)} checked={respuesta.descripcion}></Checkbox>
-        )
-    }
-    
-const setChecked = (event) => {
-
-}
