@@ -1,15 +1,30 @@
 .buttonsdiv {
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 1rem;
 }
 
 .buttons {
     display: flex;
-    width: 30%;
+    width: 25%;
     justify-content: space-evenly;
-    margin-top: 1em;
+    margin-top: 4em;
+    margin-right: 15%;
 }
 
 .chckbx {
     border-radius: 1em;
+}
+
+.descripcion {
+    display: flex;    
+}
+
+.container-table { 
+    display: flex;
+    flex-direction: column;
+    border: #ccc 2px solid;
+    border-radius: 1em;
+    padding: 0 5%;
+    padding-top: 5%;
 }

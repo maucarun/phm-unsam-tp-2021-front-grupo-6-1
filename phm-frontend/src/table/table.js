@@ -39,14 +39,14 @@ const Table = () => {
     }
 
     return(
-        <div className="">
+        <div className="container-table">
             <DataTable value={respuestas} autoLayout={true}>
-                <Column className ="" field="descripcion" header={pregunta}></Column>
+                <Column className ="descripcion" field="descripcion" header={pregunta}></Column>
                 <Column className ="" body={seleccionar}></Column>
             </DataTable>
             <div className ="buttonsdiv">
                 <div className ="buttons">
-                <Button label="Aceptar" className="p-button-secondary" onClick={() => aceptar} />
+                <Button label="Aceptar" className="p-button-primary" onClick={() => aceptar} />
                 <Button label="Cancelar" className="p-button-secondary" onClick={() => cancelar} />
                 </div>
             </div>
