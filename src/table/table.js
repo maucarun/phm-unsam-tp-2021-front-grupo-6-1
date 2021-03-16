@@ -23,11 +23,17 @@ const Table = () => {
     const setChckbx = (id) => {
         const updatedList = respuestas.map(respuesta => {
             if(respuesta.id === id) {
+                respuestas.map(respuesta => respuesta.elegida = false)
                 respuesta.elegida = !respuesta.elegida
             }
             return respuesta
         })
         setRespuestas(updatedList)
+        //console.log(respuestas.map(respuesta => respuesta.elegida).includes(true))
+    }
+
+    const existeSeleccionada = () => {
+        return respuestas.map(respuesta => respuesta.elegida).includes(true)
     }
 
     const aceptar = () => {
