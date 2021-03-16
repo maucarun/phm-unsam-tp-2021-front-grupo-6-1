@@ -28,3 +28,9 @@
     padding: 0 5%;
     padding-top: 1%;
 }
+
+.autor {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.8em;
+}

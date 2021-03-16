@@ -40,6 +40,7 @@ const Table = () => {
 
     return(
         <div className="container-table">
+                <span className="autor">Autor: Pepe Palala</span>
             <DataTable value={respuestas} autoLayout={true}>
                 <Column className ="descripcion" field="descripcion" header={pregunta}></Column>
                 <Column className ="" body={seleccionar}></Column>
