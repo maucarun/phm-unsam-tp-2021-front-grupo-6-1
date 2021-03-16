@@ -15,7 +15,7 @@ export const Header = () => {
 
     return (
         <div className="header">
-            <h1>Pregunta3!</h1>
+            <h1 className="title-header">Pregunta3!</h1>
             <Toolbar id="toolbar" right={rightContents} />    
         </div>
     )

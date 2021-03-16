@@ -1,6 +1,6 @@
 .header {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     background-color: #006064;
     color: white;
 }
@@ -13,4 +13,9 @@
 
 #btn {
     margin: 0.2em;
+}
+
+.title-header {
+    font-weight: bold;
+    margin-left: 15%;
 }

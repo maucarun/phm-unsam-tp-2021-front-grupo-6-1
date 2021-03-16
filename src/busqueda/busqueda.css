@@ -1,0 +1,29 @@
+.busqueda {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    height: 7rem;
+    justify-content: space-evenly;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    height: 2em;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    height: 2.5rem;
+}
+
+.inputtext {
+    width: 60%;
+}
+
+#button {
+    width: 5%
+}

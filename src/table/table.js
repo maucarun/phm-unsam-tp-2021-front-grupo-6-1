@@ -29,7 +29,6 @@ const Table = () => {
             return respuesta
         })
         setRespuestas(updatedList)
-        //console.log(respuestas.map(respuesta => respuesta.elegida).includes(true))
     }
 
     const existeSeleccionada = () => {
