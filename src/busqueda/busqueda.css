@@ -4,11 +4,12 @@
     align-content: center;
     height: 7rem;
     justify-content: space-evenly;
+    margin-left: 20%;
+    margin-top: 1em;
 }
 
 .title {
     display: flex;
-    justify-content: center;
     height: 2em;
     font-size: 1.5em;
     font-weight: bold;
@@ -16,7 +17,6 @@
 
 .body {
     display: flex;
-    justify-content: center;
     height: 2.5rem;
 }
 
@@ -25,5 +25,13 @@
 }
 
 #button {
-    width: 5%
+    width: 5%;
+}
+
+.chckbx-desc {
+    margin-top: 0.5em;
+}
+
+.chckbx-span {
+    margin-left: 0.5em;
 }
