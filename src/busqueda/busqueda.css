@@ -35,3 +35,18 @@
 .chckbx-span {
     margin-left: 0.5em;
 }
+
+.button-column {
+    height: 1.3em;
+}
+
+.data-table {
+    margin: 2% 20%;
+    width: 50%;
+}
+
+.button-bottom {
+    display: flex;
+    justify-content: flex-end;
+    width: 70%;
+}
