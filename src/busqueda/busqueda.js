@@ -19,7 +19,7 @@ const Busqueda = () => {
     }
 
     return (
-        <div>
+        <React.Fragment>
             <div className="busqueda">
                 <span className="title">Busqueda de Preguntas</span>
                 <div className="body">
@@ -40,7 +40,7 @@ const Busqueda = () => {
             <div className="button-bottom">
                 <Button label="Nueva Pregunta"/>
             </div>
-        </div>
+        </React.Fragment>
     )
 }
 export default Busqueda
