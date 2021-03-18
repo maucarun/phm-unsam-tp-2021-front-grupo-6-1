@@ -11,8 +11,7 @@ import 'primeicons/primeicons.css';
 
 const App = () => (
   <div className="App">
-    <Header />
-    <Busqueda />
+    <Routes/>
     <Footer />
   </div>
 )
