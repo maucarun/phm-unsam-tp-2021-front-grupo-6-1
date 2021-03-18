@@ -1,0 +1,12 @@
+.card {
+    width: 50rem;
+    margin: 2rem auto;
+    background-color: white;
+}
+
+.encabezado {
+    height: 5rem;
+    background-color: turquoise;
+    display: flex;
+    justify-content: space-between;
+}
