@@ -6,7 +6,7 @@ class PreguntaService {
 
     async getPregunta(id) {
         const { data } = await axios.get(`${REST_SERVER_URL}/pregunta/${id}`)
-        return Usuario.fromJson(data)
+        return Pregunta.fromJson(data)
     }
 
     async getPreguntas(valorBusqueda) {
@@ -14,11 +14,10 @@ class PreguntaService {
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
-    /*
-    async getContactos(valorBusqueda) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/usuarios/${valorBusqueda}`)
-        return data.map(usuario => Usuario.fromJson(usuario))
-    } */
+    async allInstances() {
+        const {data} = await axios.get(`${REST_SERVER_URL}/preguntasAll`)
+        return data.map(pregunta => Pregunta.fromJson(pregunta))
+    }
 
 }
 export const preguntaService = new PreguntaService()

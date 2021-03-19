@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import {Checkbox} from 'primereact/checkbox';
@@ -10,10 +10,19 @@ import './busqueda.css'
 
 const Busqueda = ({history}) => {
 
+    useEffect(() => {
+        allInstances()
+    }, [])
+
     const encabezadoDeTabla = "Resultado de busqueda"    
     const [valorBusqueda, setValorBusqueda] = useState("")
     const [ckeckbx, setCheckbx] = useState(false)
     const [preguntas, setPreguntas] = useState([])
+
+    const allInstances = async() => {
+        const instances = await preguntaService.allInstances()
+        setPreguntas(instances)
+    }
 
     const seleccionarButton = (preguntaCell) => {
         return(
