@@ -8,7 +8,7 @@ import { preguntaService } from '../services/pregunta-service'
 import { usuarioService } from '../services/usuario-service'
 import './busqueda.css'
 
-const Busqueda = () => {
+const Busqueda = ({history}) => {
 
     const encabezadoDeTabla = "Resultado de busqueda"    
     const [valorBusqueda, setValorBusqueda] = useState("")
@@ -33,6 +33,10 @@ const Busqueda = () => {
         setValorBusqueda(event.target.value)
     }
 
+    const navegarAEdicion = () => {
+        history.push("/")
+    }
+
     return (
         <React.Fragment>
             <div className="busqueda">
@@ -53,7 +57,7 @@ const Busqueda = () => {
                 </DataTable>
             </div>
             <div className="button-bottom">
-                <Button label="Nueva Pregunta"/>
+                <Button label="Nueva Pregunta" onClick={navegarAEdicion}/>
             </div>
         </React.Fragment>
     )
