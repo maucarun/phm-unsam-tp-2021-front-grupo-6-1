@@ -1,7 +1,8 @@
 export default class Pregunta {
-    constructor(id, descripcion) {
+    constructor(id, descripcion, opciones) {
         this.id = id
         this.descripcion = descripcion
+        this.opciones = opciones
     }
 
     static fromJson(preguntaJSON) {

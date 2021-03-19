@@ -5,6 +5,7 @@ import Header from "./header/header";
 import Busqueda from "./busqueda/busqueda";
 import Perfil from "./perfil_usuario/perfil";
 import Login from './login/login'
+import Table from "./table/table";
 //import Pregunta from './pregunta/pregunta'
 
 export const Routes = () => (
@@ -13,6 +14,7 @@ export const Routes = () => (
     <Route exact={true} path="/" component={Login} />
     <Route path="/busqueda" component={Busqueda} />
     <Route path="/perfil_usuario" component={Perfil} />
+    <Route path="/responder/:id" component={Table} />
   </Router>
 );
 //<Route path="/pregunta/:id" component={Pregunta} />
