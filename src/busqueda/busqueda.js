@@ -5,20 +5,21 @@ import {Checkbox} from 'primereact/checkbox';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { preguntaService } from '../services/pregunta-service'
+import { usuarioService } from '../services/usuario-service'
 import './busqueda.css'
 
 const Busqueda = () => {
-    const preguntasArray = [{id: 1, descripcion: "pregunta 1"}, {id: 2, descripcion: "pregunta 2"}, 
-                            {id: 3, descripcion: "pregunta 3"}, {id: 4, descripcion: "pregunta 4"}]
-    
-    const encabezadoDeTabla = "Resultado de busqueda"
-    
+
+    const encabezadoDeTabla = "Resultado de busqueda"    
     const [valorBusqueda, setValorBusqueda] = useState("")
     const [ckeckbx, setCheckbx] = useState(false)
     const [preguntas, setPreguntas] = useState([])
 
-    const seleccionarButton = () => {
+    const seleccionarButton = (preguntaCell) => {
         return(
+            preguntaCell.autor.userName === usuarioService.userLogged.userName ?
+            <Button className="button-column" label="Editar"/>
+            :
             <Button className="button-column" label="Responder"/>
         )
     }

@@ -38,6 +38,7 @@
 
 .button-column {
     height: 1.3em;
+    min-width: 7em;
 }
 
 .data-table {

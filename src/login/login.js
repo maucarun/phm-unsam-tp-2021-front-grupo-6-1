@@ -33,7 +33,7 @@ export class Login extends Component {
         const jsonDataLogin = { userName: this.state.userName, password: this.state.password }
         try {
             usuarioService.userLogged = await usuarioService.loguearUsuario(jsonDataLogin)
-            this.props.history.push('/inbox')
+            this.props.history.push('/busqueda')
         } catch (e) {
             this.setState({
                 error: true,
