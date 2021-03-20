@@ -34,3 +34,8 @@
     justify-content: flex-end;
     font-size: 0.8em;
 }
+
+.validacion-opciones {
+    color: red;
+    font-weight: bold;
+}

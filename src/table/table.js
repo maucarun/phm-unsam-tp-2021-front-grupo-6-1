@@ -17,6 +17,7 @@ const Table = ({history, match}) => {
 
     const [pregunta, setPregunta] = useState(new Pregunta())
     const [opciones, setOpciones] = useState([])
+    const[mensajeDeError, setMensajeDeError] = useState(false)
 
     const buscarPregunta = async () => {
         const preg = await preguntaService.getPregunta(match.params.id)
@@ -49,9 +50,11 @@ const Table = ({history, match}) => {
     }
 
     const aceptar = () => {
-        /* soloUnaOpcionSeleccionada() ? 
-        : */
-
+        soloUnaOpcionSeleccionada()
+        ? 
+        setMensajeDeError(false)
+        :
+        setMensajeDeError(true)
     }
 
     const cancelar = () => {
@@ -71,6 +74,9 @@ const Table = ({history, match}) => {
                 <Column className ="" body={seleccionar}></Column>
             </DataTable>
             <div className ="buttonsdiv">
+                <div>
+                    {mensajeDeError && <span className="validacion-opciones">Debe seleccionar solo una opcion</span>}
+                </div>
                 <div className ="buttons">
                 <Button label="Aceptar" className="p-button-primary" onClick={() => aceptar()} />
                 <Button label="Cancelar" className="p-button-secondary" onClick={() => cancelar()} />
