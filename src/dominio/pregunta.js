@@ -9,4 +9,10 @@ export default class Pregunta {
     static fromJson(preguntaJSON) {
         return Object.assign(new Pregunta(), preguntaJSON)
     }
+
+    toJSON() {
+        return {
+          ...this,
+        }
+      }
 }

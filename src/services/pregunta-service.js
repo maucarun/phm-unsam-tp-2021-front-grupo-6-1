@@ -19,5 +19,9 @@ class PreguntaService {
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
+    async actualizarPregunta(pregunta) {
+        return await axios.put(`${REST_SERVER_URL}/pregunta/${pregunta.id}`, pregunta.toJSON())
+    }
+
 }
 export const preguntaService = new PreguntaService()

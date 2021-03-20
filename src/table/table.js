@@ -48,12 +48,19 @@ const Table = ({history, match}) => {
         setOpciones(updatedOptions)
     }
 
-    const aceptar = async() => {
+    const aceptar = () => {
+        /* soloUnaOpcionSeleccionada() ? 
+        : */
 
     }
 
     const cancelar = () => {
         history.push("/busqueda")
+    }
+    
+    const soloUnaOpcionSeleccionada = () => {
+        const opcionesSeleccionadas = opciones.filter(op => op.elegida === true)
+        return opcionesSeleccionadas.length === 1
     }
 
     return(
