@@ -2,6 +2,8 @@
     display: flex;
     justify-content: flex-end;
     margin-bottom: 1rem;
+    background-color: white;
+    padding-bottom: 1em;
 }
 
 .buttons {
@@ -35,6 +37,9 @@
     display: flex;
     justify-content: flex-end;
     font-size: 1em;
+    background-color: cadetblue;
+    color: white;
+    padding-right: 12%;
 }
 
 .validacion-opciones {
@@ -43,5 +48,5 @@
 }
 
 .table-and-span {
-    margin-top: 5%;
+    margin-top: 1%;
 }
