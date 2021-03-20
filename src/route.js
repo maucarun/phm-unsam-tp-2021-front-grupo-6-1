@@ -6,7 +6,7 @@ import Busqueda from "./busqueda/busqueda";
 import Perfil from "./perfil_usuario/perfil";
 import Login from './login/login'
 import Table from "./table/table";
-//import Pregunta from './pregunta/pregunta'
+// import PreguntaPage from './pregunta/pregunta'
 
 export const Routes = () => (
   <Router>
@@ -15,6 +15,6 @@ export const Routes = () => (
     <Route path="/busqueda" component={Busqueda} />
     <Route path="/perfil_usuario" component={Perfil} />
     <Route path="/responder/:id" component={Table} />
+    {/* <Route path="/pregunta/:id" component={PreguntaPage} /> */}
   </Router>
 );
-//<Route path="/pregunta/:id" component={Pregunta} />
