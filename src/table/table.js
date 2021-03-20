@@ -15,17 +15,21 @@ const Table = ({history, match}) => {
         buscarPregunta()
     }, [])
 
-    const respuestasArray = [{id: 1, descripcion: "respuesta 1", elegida: false}, {id: 2, descripcion: "respuesta 2", elegida: false}, 
-                        {id: 3, descripcion: "respuesta 3", elegida: false}, {id: 4, descripcion: "respuesta 4", elegida: false},
-                        {id: 5, descripcion: "respuesta 5", elegida: false}, {id: 6, descripcion: "respuesta 6", elegida: false}]
-                        
     const [pregunta, setPregunta] = useState(new Pregunta())
-    const [respuestas, setRespuestas] = useState(respuestasArray)
-                      
-    const buscarPregunta = async() => {
+    const [opciones, setOpciones] = useState([])
+
+    const buscarPregunta = async () => {
         const preg = await preguntaService.getPregunta(match.params.id)
         setPregunta(preg)
+        //convertirOpciones(preg.opciones)
+        setOpciones(preg.opciones)
     }
+
+    /* const convertirOpciones = (options) => {
+        console.log(options)
+        const opcionesConvertidas = options.map(op => {String(op)})
+        console.log(opcionesConvertidas)
+    } */
     
     const seleccionar = (respuesta) => {
         return(
@@ -59,8 +63,8 @@ const Table = ({history, match}) => {
     return(
         <div className="container-table">
             <span className="autor">Autor: Pepe Palala</span>
-            <DataTable value={respuestas} autoLayout={true}>
-                <Column className ="descripcion" field="descripcion" header={pregunta.descripcion}></Column>
+            <DataTable value={opciones} autoLayout={true}>
+                <Column className ="descripcion" header={pregunta.descripcion}></Column>
                 <Column className ="" body={seleccionar}></Column>
             </DataTable>
             <div className ="buttonsdiv">
@@ -71,5 +75,6 @@ const Table = ({history, match}) => {
             </div>
         </div>
     )
+    //field="opciones"
 }
 export default Table
