@@ -17,8 +17,6 @@ const Table = ({history, match}) => {
 
     const [pregunta, setPregunta] = useState(new Pregunta())
     const [opciones, setOpciones] = useState([])
-    //const [correcta,setCorrecta] = useState("")
-    const [elegida, setElegida] = useState(false)
 
     const buscarPregunta = async () => {
         const preg = await preguntaService.getPregunta(match.params.id)
@@ -36,28 +34,18 @@ const Table = ({history, match}) => {
     
     const seleccionar = (opcion) => {
         return(
-            <Checkbox className="chckbx" onChange={() => setChckbx(opcion)} checked={elegida}></Checkbox>
+            <Checkbox className="chckbx" onChange={() => setChckbx(opcion)} checked={opcion.elegida}></Checkbox>
             )
         }
     
     const setChckbx = (opcion) => {
-        /* const updatedOptions = opciones.forEach(op => {
-            
-        }) */
-        
-        
-        /* const updatedList = respuestas.map(respuesta => {
-            if(respuesta.id === id) {
-                respuestas.map(respuesta => respuesta.elegida = false)
-                respuesta.elegida = !respuesta.elegida
+        const updatedOptions = opciones.map(op => {
+            if(opcion.descripcion === op.descripcion) {
+                op.elegida = !op.elegida
             }
-            return respuesta
+            return op
         })
-        setRespuestas(updatedList) */
-    }
-
-    const existeSeleccionada = () => {
-        return respuestas.map(respuesta => respuesta.elegida).includes(true)
+        setOpciones(updatedOptions)
     }
 
     const aceptar = async() => {
