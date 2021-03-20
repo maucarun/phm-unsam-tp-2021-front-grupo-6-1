@@ -6,6 +6,7 @@ import { Button } from 'primereact/button'
 import './table.css'
 import { preguntaService } from "../services/pregunta-service";
 import Pregunta from "../dominio/pregunta";
+import { usuarioService } from "../services/usuario-service";
 
 
 
@@ -53,12 +54,15 @@ const Table = ({history, match}) => {
         setOpciones(updatedOptions)
     }
 
-    const aceptar = () => {
-        soloUnaOpcionSeleccionada()
-        ? 
-        setMensajeDeError(false)
-        :
-        setMensajeDeError(true)
+    const aceptar = async () => {
+        if(soloUnaOpcionSeleccionada()) {
+            setMensajeDeError(false)
+            usuarioService.userLogged.preguntasRespondidas.push(pregunta)
+            await usuarioService.actualizarUsuario(usuarioService.userLogged)
+            history.push("/busqueda")    
+        } else {
+            setMensajeDeError(true)
+        }
     }
 
     const cancelar = () => {

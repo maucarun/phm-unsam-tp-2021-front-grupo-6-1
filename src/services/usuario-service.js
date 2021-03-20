@@ -25,5 +25,8 @@ class UsuarioService {
         return Usuario.fromJson(data)
     }
 
+    async actualizarUsuario(user) {
+        return await axios.put(`${REST_SERVER_URL}/perfilDeUsuario/${user.id}`, user.toJSON())
+    }
 }
 export const usuarioService = new UsuarioService()
