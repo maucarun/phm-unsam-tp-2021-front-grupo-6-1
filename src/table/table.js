@@ -18,10 +18,14 @@ const Table = ({history, match}) => {
     const [pregunta, setPregunta] = useState(new Pregunta())
     const [opciones, setOpciones] = useState([])
     const[mensajeDeError, setMensajeDeError] = useState(false)
+    const[nombreAutor, setNombreAutor] = useState("")
+    const[apellidoAutor, setApellidoAutor] = useState("")
 
     const buscarPregunta = async () => {
         const preg = await preguntaService.getPregunta(match.params.id)
         setPregunta(preg)
+        setNombreAutor(preg.autor.nombre)
+        setApellidoAutor(preg.autor.apellido)
         convertirOpciones(preg.opciones)
     }
 
@@ -69,7 +73,7 @@ const Table = ({history, match}) => {
     return(
         <div className="container-table">
             <div className="table-and-span">
-                <span className="autor">Autor: Pepe Palala</span>
+                <span className="autor">Autor: {nombreAutor} {apellidoAutor}</span>
                 <DataTable value={opciones} autoLayout={true}>
                     <Column className ="descripcion" field="descripcion" header={pregunta.descripcion}></Column>
                     <Column className ="" body={seleccionar}></Column>
