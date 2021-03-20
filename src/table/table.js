@@ -25,42 +25,42 @@ const Table = ({history, match}) => {
     }
 
     const convertirOpciones = (options) => {
-        //console.log(options)
         const opcionesConvertidas = []
         options.forEach(op => {
-            opcionesConvertidas.push({descripcion: op})
+            opcionesConvertidas.push({descripcion: op, elegida: false})
         })
-        //console.log(opcionesConvertidas)
         setOpciones(opcionesConvertidas)
     }
     
-    const seleccionar = (respuesta) => {
+    const seleccionar = (opcion) => {
         return(
-            <Checkbox className="chckbx" onChange={() => setChckbx(respuesta.id)} checked={respuesta.elegida}></Checkbox>
+            <Checkbox className="chckbx" onChange={() => setChckbx(opcion)} checked={opcion.elegida}></Checkbox>
             )
         }
     
-    const setChckbx = (id) => {
-        const updatedList = respuestas.map(respuesta => {
-            if(respuesta.id === id) {
-                respuestas.map(respuesta => respuesta.elegida = false)
-                respuesta.elegida = !respuesta.elegida
+    const setChckbx = (opcion) => {
+        const updatedOptions = opciones.map(op => {
+            if(opcion.descripcion === op.descripcion) {
+                op.elegida = !op.elegida
             }
-            return respuesta
+            return op
         })
-        setRespuestas(updatedList)
+        setOpciones(updatedOptions)
     }
 
-    const existeSeleccionada = () => {
-        return respuestas.map(respuesta => respuesta.elegida).includes(true)
-    }
-
-    const aceptar = async() => {
+    const aceptar = () => {
+        /* soloUnaOpcionSeleccionada() ? 
+        : */
 
     }
 
     const cancelar = () => {
         history.push("/busqueda")
+    }
+    
+    const soloUnaOpcionSeleccionada = () => {
+        const opcionesSeleccionadas = opciones.filter(op => op.elegida === true)
+        return opcionesSeleccionadas.length === 1
     }
 
     return(
