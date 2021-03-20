@@ -1,18 +1,24 @@
 .card {
-    width: 50rem;
-    margin: 2rem auto;
-    background-color: white;
+  width: 50rem;
+  margin: 2rem auto;
+  background-color: white;
 }
 
 .encabezado {
-    height: 5rem;
-    background-color: turquoise;
-    display: flex;
-    justify-content: space-between;
+  height: 5rem;
+  background-color: turquoise;
+  display: flex;
+  justify-content: space-between;
 }
 
 .inputs1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.tabla {
+    width: 15rem;
+    margin-left: auto;
+    margin-right: 2rem;
 }
