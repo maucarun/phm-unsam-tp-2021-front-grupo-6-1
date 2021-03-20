@@ -21,15 +21,18 @@ const Table = ({history, match}) => {
     const buscarPregunta = async () => {
         const preg = await preguntaService.getPregunta(match.params.id)
         setPregunta(preg)
-        //convertirOpciones(preg.opciones)
-        setOpciones(preg.opciones)
+        convertirOpciones(preg.opciones)
     }
 
-    /* const convertirOpciones = (options) => {
-        console.log(options)
-        const opcionesConvertidas = options.map(op => {String(op)})
-        console.log(opcionesConvertidas)
-    } */
+    const convertirOpciones = (options) => {
+        //console.log(options)
+        const opcionesConvertidas = []
+        options.forEach(op => {
+            opcionesConvertidas.push({descripcion: op})
+        })
+        //console.log(opcionesConvertidas)
+        setOpciones(opcionesConvertidas)
+    }
     
     const seleccionar = (respuesta) => {
         return(
@@ -64,7 +67,7 @@ const Table = ({history, match}) => {
         <div className="container-table">
             <span className="autor">Autor: Pepe Palala</span>
             <DataTable value={opciones} autoLayout={true}>
-                <Column className ="descripcion" header={pregunta.descripcion}></Column>
+                <Column className ="descripcion" field="descripcion" header={pregunta.descripcion}></Column>
                 <Column className ="" body={seleccionar}></Column>
             </DataTable>
             <div className ="buttonsdiv">
@@ -75,6 +78,5 @@ const Table = ({history, match}) => {
             </div>
         </div>
     )
-    //field="opciones"
 }
 export default Table
