@@ -68,11 +68,13 @@ const Table = ({history, match}) => {
 
     return(
         <div className="container-table">
-            <span className="autor">Autor: Pepe Palala</span>
-            <DataTable value={opciones} autoLayout={true}>
-                <Column className ="descripcion" field="descripcion" header={pregunta.descripcion}></Column>
-                <Column className ="" body={seleccionar}></Column>
-            </DataTable>
+            <div className="table-and-span">
+                <span className="autor">Autor: Pepe Palala</span>
+                <DataTable value={opciones} autoLayout={true}>
+                    <Column className ="descripcion" field="descripcion" header={pregunta.descripcion}></Column>
+                    <Column className ="" body={seleccionar}></Column>
+                </DataTable>
+            </div>
             <div className ="buttonsdiv">
                 <div>
                     {mensajeDeError && <span className="validacion-opciones">Debe seleccionar solo una opcion</span>}
