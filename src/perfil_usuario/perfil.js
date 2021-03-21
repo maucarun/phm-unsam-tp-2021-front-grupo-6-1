@@ -61,8 +61,8 @@ class Perfil extends Component {
     this.setState({ mostrarModal: false });
   }
 
-  nombreYApellido(usuario) {
-   return usuario.nombre + " " + usuario.apellido
+  nombreYApellido(usuarioString) {
+   return usuarioString
   }
 
   render() {
@@ -113,7 +113,7 @@ class Perfil extends Component {
 
         <section className="tabla">
           <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
-            <Column body={this.nombreYApellido} header="Nombres de Amigos"></Column>
+            <Column body={this.nombreYApellido} header="Mis Amigos"></Column>
           </DataTable>
         </section>
 
