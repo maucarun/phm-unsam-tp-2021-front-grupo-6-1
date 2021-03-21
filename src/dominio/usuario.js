@@ -3,10 +3,11 @@ export default class Usuario {
         this.id = id
         this.nombre = nombre
         this.apellido = apellido
-        this.puntaje = puntaje
+        this.fechaDeNacimiento = fechaDeNacimiento
         this.userName = userName
         this.password = password
-        this.fechaDeNacimiento = fechaDeNacimiento
+        this.amigos = new Set()
+        this.puntaje = puntaje
         this.preguntasRespondidas = preguntasRespondidas
     }
 

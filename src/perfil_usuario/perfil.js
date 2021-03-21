@@ -61,6 +61,10 @@ class Perfil extends Component {
     this.setState({ mostrarModal: false });
   }
 
+  nombreYApellido(usuario) {
+   return usuario.nombre + " " + usuario.apellido
+  }
+
   render() {
     return (
       <div className="card">
@@ -108,8 +112,8 @@ class Perfil extends Component {
         ></Dialog>
 
         <section className="tabla">
-          <DataTable value={this.state.usuario}>
-            <Column field="code" header="Code"></Column>
+          <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
+            <Column body={this.nombreYApellido} header="Nombres de Amigos"></Column>
           </DataTable>
         </section>
 
