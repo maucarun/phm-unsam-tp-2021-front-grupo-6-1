@@ -21,7 +21,7 @@
 }
 
 .inputtext {
-    width: 60%;
+    width: 70%;
 }
 
 #button {
@@ -50,10 +50,5 @@
 .button-bottom {
     display: flex;
     justify-content: flex-end;
-    width: 70%;
-}
-
-.column-buttons {
-    /* position: relative;
-    left: 25%; */
+    width: 80%;
 }
