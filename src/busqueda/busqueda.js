@@ -69,7 +69,7 @@ const Busqueda = ({history}) => {
                 </div>
             </div>
             <div className="data-table">
-                <DataTable value={preguntas} autoLayout={true}>
+                <DataTable value={preguntas} autoLayout={true} scrollable scrollHeight="220px">
                     <Column className ="descripcion" field="descripcion" header={encabezadoDeTabla}></Column>
                     <Column className ="" body={seleccionarButton}></Column>
                 </DataTable>
