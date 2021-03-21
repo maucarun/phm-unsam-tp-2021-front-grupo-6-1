@@ -65,6 +65,10 @@ class Perfil extends Component {
    return usuarioString
   }
 
+  cancelar() {
+    this.props.history.push('/busqueda')
+  }
+
   render() {
     return (
       <div className="card">
@@ -97,19 +101,23 @@ class Perfil extends Component {
           <h5>Amigos</h5>
           <Button
             label="Agregar"
-            className="p-button-primary"
+            className="p-button-rounded p-button-Primary"
             onClick={() => this.agregar()}
           />
         </section>
 
         <Dialog
-          header="Header"
+          header="Personas que quizas conozcaz"
           visible={this.state.mostrarModal}
           style={{ width: "50vw" }}
           // footer={renderFooter("displayBasic")}
           onHide={() => this.cerrar()}
           baseZIndex={1000}
-        ></Dialog>
+        >
+
+
+
+        </Dialog>
 
         <section className="tabla">
           <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
@@ -117,7 +125,17 @@ class Perfil extends Component {
           </DataTable>
         </section>
 
-        <section></section>
+        <section>
+          <h3>Preguntas Respondidas</h3>
+          <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
+            <Column body={this.nombreYApellido}></Column>
+          </DataTable>
+
+        </section>
+        <section className="botonera">
+        <Button label="Aceptar" className="p-button-rounded p-button-success" />
+        <Button label="Cancelar" onClick={() => this.cancelar()} className="p-button-rounded p-button-danger" />
+        </section>
       </div>
     );
   }

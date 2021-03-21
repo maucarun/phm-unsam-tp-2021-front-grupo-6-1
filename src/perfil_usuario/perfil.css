@@ -22,3 +22,16 @@
     margin-left: auto;
     margin-right: 2rem;
 }
+
+.tabla th {
+  background-color: #ff9ee3 !important;
+}
+
+.botonera {
+  text-align: right;
+  padding: 1rem;
+}
+
+.botonera button {
+  margin-left: 1rem;
+}
