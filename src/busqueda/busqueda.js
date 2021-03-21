@@ -27,7 +27,7 @@ const Busqueda = ({history}) => {
     const seleccionarButton = (preguntaCell) => {
         return(
             preguntaCell.autor.userName === usuarioService.userLogged.userName ?
-            <Button className="button-column" label="Editar" onClick={navegarAEdicion}/>
+            <Button className="button-column" label="Editar" onClick={() => navegarAEdicion(preguntaCell.id)}/>
             :
             <Button className="button-column" label="Responder" onClick={() => navegarAResponder(preguntaCell.id)}/>
         )
@@ -47,8 +47,8 @@ const Busqueda = ({history}) => {
         }
     }
 
-    const navegarAEdicion = () => {
-        history.push("/")
+    const navegarAEdicion = (id) => {
+        history.push(`/pregunta/${id}`)
     }
 
     const navegarAResponder = (id) => {
