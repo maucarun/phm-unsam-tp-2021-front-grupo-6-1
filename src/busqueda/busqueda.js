@@ -27,9 +27,9 @@ const Busqueda = ({history}) => {
     const seleccionarButton = (preguntaCell) => {
         return(
             preguntaCell.autor.userName === usuarioService.userLogged.userName ?
-            <Button className="button-column" label="Editar" onClick={() => navegarAEdicion(preguntaCell.id)}/>
+            <Button id="button-column" label="Editar" onClick={() => navegarAEdicion(preguntaCell.id)}/>
             :
-            <Button className="button-column" label="Responder" onClick={() => navegarAResponder(preguntaCell.id)}/>
+            <Button id="button-column" label="Responder" onClick={() => navegarAResponder(preguntaCell.id)}/>
         )
     }
 
@@ -71,7 +71,7 @@ const Busqueda = ({history}) => {
             <div className="data-table">
                 <DataTable value={preguntas} autoLayout={true} scrollable scrollHeight="220px">
                     <Column className ="descripcion" field="descripcion" header={encabezadoDeTabla}></Column>
-                    <Column className ="" body={seleccionarButton}></Column>
+                    <Column className ="column-buttons" body={seleccionarButton} with="30%" ></Column>
                 </DataTable>
             </div>
             <div className="button-bottom">
