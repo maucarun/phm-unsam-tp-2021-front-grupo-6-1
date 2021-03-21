@@ -42,6 +42,8 @@ const Busqueda = ({history}) => {
         setValorBusqueda(event.target.value)
         if(event.target.value !== "") {
             buscar(event.target.value)
+        }else {
+            allInstances()
         }
     }
 
