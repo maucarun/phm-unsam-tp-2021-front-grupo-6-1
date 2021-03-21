@@ -33,13 +33,16 @@ const Busqueda = ({history}) => {
         )
     }
 
-    const buscar = async() => {
-        const data = await preguntaService.getPreguntas(valorBusqueda)
+    const buscar = async(valor) => {
+        const data = await preguntaService.getPreguntas(valor)
         setPreguntas(data)
     }
 
     const alCambiarValorDeBusqueda = (event) => {
         setValorBusqueda(event.target.value)
+        if(event.target.value !== "") {
+            buscar(event.target.value)
+        }
     }
 
     const navegarAEdicion = () => {
