@@ -1,0 +1,54 @@
+.preguntaBody {
+    width: 50rem;
+    margin: 2rem auto;
+    background-color: white;
+    height: 90%;
+    /* margin-bottom: 300px; */
+    display: flex;
+    flex-direction: column;
+}
+  
+.encabezado {
+    height: 5rem;
+    background-color: turquoise;
+    display: flex;
+    justify-content: space-between;
+}
+  
+.tabla {
+    width: 15rem;
+    margin-left: auto;
+    margin-right: 2rem;
+}
+
+.dropdown .p-dropdown {
+    width: 14rem;
+}
+
+.tipoPregunta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 55px 0 55px;
+}
+
+.opciones {
+    margin: 0 55px 0 55px;
+}
+
+.label {
+    margin-left: 55px;
+}
+
+.desc{
+    width: 85%;
+}
+
+.agregar{
+    display: flex;
+    margin-right: 55px;
+}
+
+.agregarOpcion {
+    width: 95%;
+}
