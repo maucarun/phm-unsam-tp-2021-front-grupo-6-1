@@ -15,6 +15,7 @@ class Perfil extends Component {
     this.state = {
       usuario: new Usuario(),
       mostrarModal: false,
+      noAmigos:[]
     };
   }
 
@@ -53,17 +54,27 @@ class Perfil extends Component {
     this.cambiarEstado(usuario);
   }
 
-  agregar() {
-    this.setState({ mostrarModal: true });
+  async agregar() {
+    try {
+      const noAmigos = await usuarioService.getNoAmigos();
+      this.setState({noAmigos: noAmigos , mostrarModal: true});
+    } catch (e) {
+      console.error(e)
+      //this.addMessages(e)
+    }
   }
 
   cerrar() {
     this.setState({ mostrarModal: false });
   }
 
-  nombreYApellido(usuarioString) {
-   return usuarioString
+  nombreYApellidoAmigo(amigoString) {
+   return amigoString
   }
+
+  nombreYApellidoNoAmigo(amigo) {
+    return amigo.nombre  + " " + amigo.apellido
+   }
 
   cancelar() {
     this.props.history.push('/busqueda')
@@ -107,13 +118,18 @@ class Perfil extends Component {
         </section>
 
         <Dialog
-          header="Personas que quizas conozcaz"
+          header="Personas que quizas conozcas"
           visible={this.state.mostrarModal}
           style={{ width: "50vw" }}
           // footer={renderFooter("displayBasic")}
           onHide={() => this.cerrar()}
           baseZIndex={1000}
         >
+          <section>
+          <DataTable value={this.state.noAmigos} scrollable scrollHeight="100px">
+            <Column body={this.nombreYApellidoNoAmigo}></Column>
+          </DataTable>
+          </section>
 
 
 
@@ -121,15 +137,15 @@ class Perfil extends Component {
 
         <section className="tabla">
           <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
-            <Column body={this.nombreYApellido} header="Mis Amigos"></Column>
+            <Column body={this.nombreYApellidoAmigo} header="Mis Amigos"></Column>
           </DataTable>
         </section>
 
         <section>
           <h3>Preguntas Respondidas</h3>
-          <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
+          {/* <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
             <Column body={this.nombreYApellido}></Column>
-          </DataTable>
+          </DataTable> */}
 
         </section>
         <section className="botonera">
