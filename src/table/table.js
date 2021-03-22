@@ -7,7 +7,8 @@ import './table.css'
 import { preguntaService } from "../services/pregunta-service";
 import Pregunta from "../dominio/pregunta";
 import { usuarioService } from "../services/usuario-service";
-
+import { confirmPopup } from 'primereact/confirmpopup'
+import { Dialog } from 'primereact/dialog';
 
 
 const Table = ({history, match}) => {
@@ -18,10 +19,12 @@ const Table = ({history, match}) => {
 
     const [pregunta, setPregunta] = useState(new Pregunta())
     const [opciones, setOpciones] = useState([])
-    const[mensajeDeError, setMensajeDeError] = useState(false)
-    const[nombreAutor, setNombreAutor] = useState("")
-    const[apellidoAutor, setApellidoAutor] = useState("")
-
+    const [mensajeDeError, setMensajeDeError] = useState(false)
+    const [nombreAutor, setNombreAutor] = useState("")
+    const [apellidoAutor, setApellidoAutor] = useState("")
+    const [displaySuccess, setDisplaySuccess] = useState(false)
+    const [displayIncorrect, setDisplayIncorrect] = useState(false)
+    
     const buscarPregunta = async () => {
         const preg = await preguntaService.getPregunta(match.params.id)
         setPregunta(preg)
@@ -29,7 +32,7 @@ const Table = ({history, match}) => {
         setApellidoAutor(preg.autor.apellido)
         convertirOpciones(preg.opciones)
     }
-
+    
     const convertirOpciones = (options) => {
         const opcionesConvertidas = []
         options.forEach(op => {
@@ -44,8 +47,8 @@ const Table = ({history, match}) => {
             )
         }
     
-    const setChckbx = (opcion) => {
-        const updatedOptions = opciones.map(op => {
+        const setChckbx = (opcion) => {
+            const updatedOptions = opciones.map(op => {
             if(opcion.descripcion === op.descripcion) {
                 op.elegida = !op.elegida
             }
@@ -54,26 +57,71 @@ const Table = ({history, match}) => {
         setOpciones(updatedOptions)
     }
 
+    const confirm = (opcion) => {
+        confirmPopup({
+            message: "¿ Confirmar Respuesta ?",
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => acceptFunc(opcion),
+            reject: () => rejectFunc()
+        });
+    }
+
+    const rejectFunc = () => {
+
+    }
+    
+    const acceptFunc = (opcion) => {
+        if(opcion === pregunta.respuestaCorrecta) {
+            actualizarUser()
+            setDisplaySuccess(true)
+        } else {
+            setDisplayIncorrect(true)
+        }
+    }
+    
+    const actualizarUser = async () => {
+        /* usuarioService.userLogged.preguntasRespondidas.push(pregunta)
+        await usuarioService.actualizarUsuario(usuarioService.userLogged) */
+    }
+    
     const aceptar = async () => {
         if(soloUnaOpcionSeleccionada()) {
             setMensajeDeError(false)
-            usuarioService.userLogged.preguntasRespondidas.push(pregunta)
-            await usuarioService.actualizarUsuario(usuarioService.userLogged)
-            history.push("/busqueda")    
+            const opSelec = opcionSeleccionada()
+            confirm(opSelec)
         } else {
             setMensajeDeError(true)
         }
     }
-
+    
     const cancelar = () => {
         history.push("/busqueda")
     }
     
     const soloUnaOpcionSeleccionada = () => {
+        return filtrarOpcionesSeleccionadas().length === 1
+    }
+    
+    const filtrarOpcionesSeleccionadas = () => {
         const opcionesSeleccionadas = opciones.filter(op => op.elegida === true)
-        return opcionesSeleccionadas.length === 1
+        return opcionesSeleccionadas
+    }
+    
+    const opcionSeleccionada = () => {
+        const op = filtrarOpcionesSeleccionadas()    
+        return op[0].descripcion
+    }
+    
+    const cerrarPantallaSuccess = () => {
+        setDisplaySuccess(false)
+        history.push("/busqueda")
     }
 
+    const cerrarPantallaIncorrect = () => {
+        setDisplayIncorrect(false)
+        history.push("/busqueda")
+    }
+    
     return(
         <div className="container-table">
             <div className="table-and-span">
@@ -92,6 +140,12 @@ const Table = ({history, match}) => {
                 <Button label="Cancelar" className="p-button-secondary" onClick={() => cancelar()} />
                 </div>
             </div>
+            <Dialog header="¡ Felicitaciones !" visible={displaySuccess} style={{ width: '50vw' }} onHide={() => cerrarPantallaSuccess()}>
+                <span className="congratulations">Usted ha respondido correctamente </span>
+            </Dialog>
+            <Dialog header="Incorrecto" visible={displayIncorrect} style={{ width: '50vw' }} onHide={() => cerrarPantallaIncorrect()}>
+                <span className="no-congratulations">Su respuesta es incorrecta. Siga intentando. </span>
+            </Dialog>
         </div>
     )
 }

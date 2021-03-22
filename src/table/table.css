@@ -43,10 +43,20 @@
 }
 
 .validacion-opciones {
-    color: red;
+    color: #FF9999;
     font-weight: bold;
 }
 
 .table-and-span {
     margin-top: 1%;
+}
+
+.congratulations {
+    color: green;
+    font-weight: bold;
+}
+
+.no-congratulations {
+    color: red;
+    font-weight: bold;
 }
