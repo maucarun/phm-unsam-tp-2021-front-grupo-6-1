@@ -6,6 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(163 226 236);
+  background-image: url("https://media.gettyimages.com/vectors/seamless-question-mark-background-vector-id950169146?s=612x612");
+  /*background-image: url("https://previews.123rf.com/images/nataliagesto/nataliagesto1204/nataliagesto120400402/13252515-signo-de-interrogaci%C3%B3n-s%C3%ADmbolo-signo-nube-tel%C3%B3n-de-fondo.jpg");*/
 }
 
 code {
