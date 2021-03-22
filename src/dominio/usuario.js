@@ -8,7 +8,7 @@ export default class Usuario {
         this.password = password
         this.amigos = new Set()
         this.puntaje = puntaje
-        this.preguntasRespondidas = preguntasRespondidas
+        this.preguntasRespondidas = new Set()
     }
 
     static fromJson(usuarioJSON) {
