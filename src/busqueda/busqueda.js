@@ -10,14 +10,14 @@ import './busqueda.css'
 
 const Busqueda = ({history}) => {
 
-    useEffect(() => {
-        allInstances()
-    }, [])
-
     const encabezadoDeTabla = "Resultado de busqueda"    
     const [valorBusqueda, setValorBusqueda] = useState("")
     const [soloActivas, setSoloActivas] = useState(false)
     const [preguntas, setPreguntas] = useState([])
+
+    useEffect(async () => {
+        await buscar(valorBusqueda)
+    }, [soloActivas])
 
     const allInstances = async() => {
         const instances = await preguntaService.allInstances()
@@ -34,18 +34,18 @@ const Busqueda = ({history}) => {
     }
 
     const buscar = async(valor) => {
-        const data = await preguntaService.getPreguntas(valor, soloActivas)
-        setPreguntas(data)
-    }
-
-    const alCambiarValorDeBusqueda = (event) => {
-        setValorBusqueda(event.target.value)
-        if(event.target.value !== "") {
-            buscar(event.target.value)
-        }else {
-            allInstances()
+        if(valor !== "") {
+            const data = await preguntaService.getPreguntas(valor, soloActivas)
+            setPreguntas(data)
+        } else {
+            await allInstances()
             //falta filtrar allInstances cuando soloActivas = true
         }
+    }
+
+    const alCambiarValorDeBusqueda = async (event) => {
+        setValorBusqueda(event.target.value)
+        await buscar(event.target.value)
     }
 
     const navegarAEdicion = (id) => {
@@ -54,11 +54,6 @@ const Busqueda = ({history}) => {
 
     const navegarAResponder = (id) => {
         history.push(`/responder/${id}`)
-    }
-
-    const cuandoSoloActivas = () => {
-        setSoloActivas(!soloActivas)
-        //aca va algo mas seguramente
     }
 
     return (
@@ -70,7 +65,7 @@ const Busqueda = ({history}) => {
                     <Button id="button" icon="pi pi-search iconoBusqueda" iconPos="right" onClick={() => buscar()}/>
                 </div>
                 <div className="chckbx-desc">
-                    <Checkbox className="" onChange={() => cuandoSoloActivas()} checked={soloActivas}></Checkbox>
+                    <Checkbox className="" onChange={() => setSoloActivas(!soloActivas)} checked={soloActivas}></Checkbox>
                     <span className="chckbx-span">Solo activas</span>
                 </div>
             </div>
