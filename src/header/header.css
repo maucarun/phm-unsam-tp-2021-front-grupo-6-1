@@ -3,6 +3,7 @@
     justify-content: space-between;
     background-color: #006064;
     color: white;
+    text-shadow: -2px -2px 1px #000;
 }
 
 #toolbar {

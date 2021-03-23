@@ -13,10 +13,10 @@ import { Dialog } from 'primereact/dialog';
 
 const Table = ({history, match}) => {
 
-    useEffect(()=>{
-        buscarPregunta()
+    useEffect(async ()=>{
+        await buscarPregunta()
     }, [])
-
+    
     const [pregunta, setPregunta] = useState(new Pregunta())
     const [opciones, setOpciones] = useState([])
     const [mensajeDeError, setMensajeDeError] = useState(false)
@@ -49,14 +49,14 @@ const Table = ({history, match}) => {
     
         const setChckbx = (opcion) => {
             const updatedOptions = opciones.map(op => {
-            if(opcion.descripcion === op.descripcion) {
+                if(opcion.descripcion === op.descripcion) {
                 op.elegida = !op.elegida
             }
             return op
         })
         setOpciones(updatedOptions)
     }
-
+    
     const confirm = (opcion) => {
         confirmPopup({
             message: "¿ Confirmar Respuesta ?",
@@ -65,14 +65,14 @@ const Table = ({history, match}) => {
             reject: () => rejectFunc()
         });
     }
-
+    
     const rejectFunc = () => {
 
     }
     
-    const acceptFunc = (opcion) => {
+    const acceptFunc = async (opcion) => {
         if(opcion === pregunta.respuestaCorrecta) {
-            actualizarUser()
+            await actualizarUser()
             setDisplaySuccess(true)
         } else {
             setDisplayIncorrect(true)
@@ -80,12 +80,7 @@ const Table = ({history, match}) => {
     }
     
     const actualizarUser = async () => {
-        const idUser = usuarioService.userLogged.id
-        usuarioService.userLogged.preguntasRespondidas.push(pregunta)
-        //await usuarioService.actualizarUsuario(usuarioService.userLogged)
-        console.log(usuarioService.userLogged)
-        //const updatedUser = await usuarioService.getUsuario(idUser)
-        //usuarioService.userLogged = updatedUser
+       // await usuarioService.actualizarUsuario(usuarioService.userLogged)
     }
     
     const aceptar = async () => {
@@ -120,7 +115,7 @@ const Table = ({history, match}) => {
         setDisplaySuccess(false)
         history.push("/busqueda")
     }
-
+    
     const cerrarPantallaIncorrect = () => {
         setDisplayIncorrect(false)
         history.push("/busqueda")
