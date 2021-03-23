@@ -19,8 +19,8 @@ const Busqueda = ({history}) => {
         await buscar(valorBusqueda)
     }, [soloActivas])
 
-    const allInstances = async() => {
-        const instances = await preguntaService.allInstances()
+    const allInstances = async(activa) => {
+        const instances = await preguntaService.allInstances(activa)
         setPreguntas(instances)
     }
 
@@ -38,8 +38,7 @@ const Busqueda = ({history}) => {
             const data = await preguntaService.getPreguntas(valor, soloActivas)
             setPreguntas(data)
         } else {
-            await allInstances()
-            //falta filtrar allInstances cuando soloActivas = true
+            await allInstances(soloActivas)
         }
     }
 

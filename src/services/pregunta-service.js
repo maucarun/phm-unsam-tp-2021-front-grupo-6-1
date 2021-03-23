@@ -14,8 +14,8 @@ class PreguntaService {
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
-    async allInstances() {
-        const {data} = await axios.get(`${REST_SERVER_URL}/preguntasAll`)
+    async allInstances(soloActivas) {
+        const {data} = await axios.get(`${REST_SERVER_URL}/preguntasAll/${soloActivas}`)
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
