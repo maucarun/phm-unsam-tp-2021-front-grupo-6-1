@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, createRef} from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import {Checkbox} from 'primereact/checkbox';
@@ -7,21 +7,27 @@ import { Column } from 'primereact/column';
 import { preguntaService } from '../services/pregunta-service'
 import { usuarioService } from '../services/usuario-service'
 import './busqueda.css'
+import { Toast } from 'primereact/toast';
 
 const Busqueda = ({history}) => {
 
-    const encabezadoDeTabla = "Resultado de busqueda"    
+    const toast = createRef()
+    const encabezadoDeTabla = "Resultado de busqueda"
     const [valorBusqueda, setValorBusqueda] = useState("")
     const [soloActivas, setSoloActivas] = useState(false)
     const [preguntas, setPreguntas] = useState([])
-
+    
     useEffect(async () => {
         await buscar(valorBusqueda)
     }, [soloActivas])
 
     const allInstances = async(activa) => {
-        const instances = await preguntaService.allInstances(activa)
-        setPreguntas(instances)
+        try {
+            const instances = await preguntaService.allInstances(activa)
+            setPreguntas(instances)
+        } catch(error) {
+            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 3000})
+        }
     }
 
     const seleccionarButton = (preguntaCell) => {
@@ -35,8 +41,12 @@ const Busqueda = ({history}) => {
 
     const buscar = async(valor) => {
         if(valor !== "") {
-            const data = await preguntaService.getPreguntas(valor, soloActivas)
-            setPreguntas(data)
+            try {
+                const data = await preguntaService.getPreguntas(valor, soloActivas)
+                setPreguntas(data)
+            } catch {
+                toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 3000})
+            }
         } else {
             await allInstances(soloActivas)
         }
@@ -77,6 +87,7 @@ const Busqueda = ({history}) => {
             <div className="button-bottom">
                 <Button label="Nueva Pregunta" onClick={navegarAEdicion}/>
             </div>
+            <Toast ref={toast} />
         </React.Fragment>
     )
 }
