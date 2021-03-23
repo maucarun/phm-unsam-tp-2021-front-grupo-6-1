@@ -9,8 +9,8 @@ class PreguntaService {
         return Pregunta.fromJson(data)
     }
 
-    async getPreguntas(valorBusqueda) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/${valorBusqueda}`)
+    async getPreguntas(valorBusqueda, soloActivas) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/${valorBusqueda}/${soloActivas}`)
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 

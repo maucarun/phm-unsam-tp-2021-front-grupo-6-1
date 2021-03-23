@@ -80,8 +80,12 @@ const Table = ({history, match}) => {
     }
     
     const actualizarUser = async () => {
-        /* usuarioService.userLogged.preguntasRespondidas.push(pregunta)
-        await usuarioService.actualizarUsuario(usuarioService.userLogged) */
+        const idUser = usuarioService.userLogged.id
+        usuarioService.userLogged.preguntasRespondidas.push(pregunta)
+        //await usuarioService.actualizarUsuario(usuarioService.userLogged)
+        console.log(usuarioService.userLogged)
+        //const updatedUser = await usuarioService.getUsuario(idUser)
+        //usuarioService.userLogged = updatedUser
     }
     
     const aceptar = async () => {

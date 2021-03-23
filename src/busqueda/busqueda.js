@@ -16,7 +16,7 @@ const Busqueda = ({history}) => {
 
     const encabezadoDeTabla = "Resultado de busqueda"    
     const [valorBusqueda, setValorBusqueda] = useState("")
-    const [ckeckbx, setCheckbx] = useState(false)
+    const [soloActivas, setSoloActivas] = useState(false)
     const [preguntas, setPreguntas] = useState([])
 
     const allInstances = async() => {
@@ -34,7 +34,7 @@ const Busqueda = ({history}) => {
     }
 
     const buscar = async(valor) => {
-        const data = await preguntaService.getPreguntas(valor)
+        const data = await preguntaService.getPreguntas(valor, soloActivas)
         setPreguntas(data)
     }
 
@@ -44,6 +44,7 @@ const Busqueda = ({history}) => {
             buscar(event.target.value)
         }else {
             allInstances()
+            //falta filtrar allInstances cuando soloActivas = true
         }
     }
 
@@ -55,6 +56,11 @@ const Busqueda = ({history}) => {
         history.push(`/responder/${id}`)
     }
 
+    const cuandoSoloActivas = () => {
+        setSoloActivas(!soloActivas)
+        //aca va algo mas seguramente
+    }
+
     return (
         <React.Fragment>
             <div className="busqueda">
@@ -64,7 +70,7 @@ const Busqueda = ({history}) => {
                     <Button id="button" icon="pi pi-search iconoBusqueda" iconPos="right" onClick={() => buscar()}/>
                 </div>
                 <div className="chckbx-desc">
-                    <Checkbox className="" onChange={() => setCheckbx(!ckeckbx)} checked={ckeckbx}></Checkbox>
+                    <Checkbox className="" onChange={() => cuandoSoloActivas()} checked={soloActivas}></Checkbox>
                     <span className="chckbx-span">Solo activas</span>
                 </div>
             </div>
