@@ -23,8 +23,8 @@ class PreguntaService {
         return await axios.put(`${REST_SERVER_URL}/pregunta/${pregunta.id}`, pregunta.toJSON())
     }
 
-    async crearPregunta(pregunta) {
-        return await axios.post(`${REST_SERVER_URL}/nuevaPregunta`, pregunta.toJSON())
+    async nuevaPregunta(pregunta) {
+        await axios.post(`${REST_SERVER_URL}/pregunta`, pregunta.toJSON())
     }
 
 }

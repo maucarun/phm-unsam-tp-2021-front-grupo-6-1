@@ -16,5 +16,6 @@ export const Routes = () => (
     <Route path="/perfil_usuario" component={Perfil} />
     <Route path="/responder/:id" component={Table} />
     <Route path="/pregunta/:id" component={PreguntaPage} />
+    <Route path="/nuevoPregunta" component={PreguntaPage} />
   </Router>
 );

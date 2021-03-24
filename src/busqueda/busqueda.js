@@ -65,6 +65,10 @@ const Busqueda = ({history}) => {
         history.push(`/responder/${id}`)
     }
 
+    const navegarANueva = () => {
+        history.push(`/pregunta/nueva`)
+    }
+
     return (
         <React.Fragment>
             <div className="busqueda">
@@ -85,7 +89,7 @@ const Busqueda = ({history}) => {
                 </DataTable>
             </div>
             <div className="button-bottom">
-                <Button label="Nueva Pregunta" onClick={navegarAEdicion}/>
+                <Button label="Nueva Pregunta" onClick={navegarANueva}/>
             </div>
             <Toast ref={toast} />
         </React.Fragment>

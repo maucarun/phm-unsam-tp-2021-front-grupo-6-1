@@ -25,12 +25,15 @@ class PreguntaPage extends Component {
             mensajeDeError: false,
             nuevaOpcionVacia: false,
             nuevaOpcion: '',
+            autor: '',
+            nueva: false,
+            tipo: ''
         };
 
         this.selectItems = [
-            { label: 'Simple', value: 'Simple' },
-            { label: 'Riesgo', value: 'Riesgo' },
-            { label: 'Solidaria', value: 'Solidaria' },
+            { label: 'Simple', value: 'simple' },
+            { label: 'De riesgo', value: 'deRiesgo' },
+            { label: 'Solidaria', value: 'solidaria' },
         ];
 
         this.seleccionarTipo = this.seleccionarTipo.bind(this);
@@ -39,21 +42,29 @@ class PreguntaPage extends Component {
     async componentDidMount() {
         try {
             this.state.usuario = await usuarioService.getUsuario(usuarioService.userLogged.id);
+            const idPregunta = this.props.match.params.id
+            if (idPregunta == "nueva") {
+                console.log("creo nueva")
+                this.setState({
+                    autor: this.state.usuario.nombre + ' ' + this.state.usuario.apellido,
+                    //id: 0
+                    nueva: true,
+                })
+                console.log("creo nueva2")
+            }
+            else {
+                console.log("edicion")
+                const pregunta = await preguntaService.getPregunta(idPregunta)
+                this.setState({
+                    pregunta: pregunta,
+                    descripcionPregunta: pregunta.descripcion,
+                    tipo: pregunta.type,
+                })
+                console.log(this.state.pregunta.type)
+                this.convertirOpciones(this.state.pregunta.opciones)
+            }
         } catch (e) {
-            console.log("fallo1")
-        }
-        try {
-            const pregunta = await preguntaService.getPregunta(this.props.match.params.id)
-            this.setState({
-                pregunta: pregunta,
-                descripcionPregunta: pregunta.descripcion,
-            })
-            console.log(this.state.pregunta)
-            console.log(this.state.pregunta.autor)
-            console.log(this.state.pregunta.respuestaCorrecta)
-            this.convertirOpciones(this.state.pregunta.opciones)
-        } catch (e) {
-            console.log("fallo2")
+            //console.log("fallo2")
         }
     }
 
@@ -72,7 +83,12 @@ class PreguntaPage extends Component {
             }
         })
         this.setOpciones(opcionesConvertidas)
-        console.log(this.state.opciones)
+    }
+
+    desconvertirOpciones = (options) => {
+        const opcionesDesconvertidas = []
+        options.forEach(op => { opcionesDesconvertidas.push(op.descripcion) })
+        return opcionesDesconvertidas
     }
 
     setOpciones(options) {
@@ -137,7 +153,27 @@ class PreguntaPage extends Component {
             const opcionCorrecta = this.state.opciones.find((op) => op.elegida == true)
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
             this.state.pregunta.descripcion = this.state.descripcionPregunta
+            this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
             await preguntaService.actualizarPregunta(this.state.pregunta)
+            this.props.history.push("/busqueda")
+        } else {
+            this.setState(
+                { mensajeDeError: true }
+            )
+        }
+    }
+
+    crear = async () => {
+        if (this.soloUnaOpcionSeleccionada()) {
+            this.setState(
+                { mensajeDeError: false }
+            )
+            const opcionCorrecta = this.state.opciones.find((op) => op.elegida == true)
+            this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
+            this.state.pregunta.descripcion = this.state.descripcionPregunta
+            this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
+            this.state.pregunta.autor = this.state.usuario
+            await preguntaService.nuevaPregunta(this.state.pregunta)
             this.props.history.push("/busqueda")
         } else {
             this.setState(
@@ -162,7 +198,8 @@ class PreguntaPage extends Component {
     render() {
         return (
             <div className="preguntaBody">
-                <span className="autor">Autor: {this.state.pregunta.autor.nombre} {this.state.pregunta.autor.apellido}</span>
+                {this.state.nueva && <span className="autor">Autor: {this.state.autor}</span>}
+                {!this.state.nueva && <span className="autor">Autor: {this.state.pregunta.autor.nombre} {this.state.pregunta.autor.apellido}</span>}
                 <section className="encabezado">
                     <div className="tituloPregunta">
                         <InputText className="descripcionPregunta" value={this.state.descripcionPregunta} onChange={(e) => this.setState({ descripcionPregunta: e.target.value })} />
@@ -204,7 +241,8 @@ class PreguntaPage extends Component {
                             {this.state.mensajeDeError && <span className="validacion-opciones">Debe seleccionar solo una opción</span>}
                         </div>
                         <div className="buttons">
-                            <Button label="Aceptar" className="p-button-primary" onClick={() => this.aceptar()} />
+                            {this.state.nueva && <Button label="Aceptar" className="p-button-primary" onClick={() => this.crear()} />}
+                            {!this.state.nueva && <Button label="Aceptar" className="p-button-primary" onClick={() => this.aceptar()} />}
                             <Button label="Cancelar" className="p-button-secondary" onClick={() => this.cancelar()} />
                         </div>
                     </div>
