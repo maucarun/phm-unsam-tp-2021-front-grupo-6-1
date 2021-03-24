@@ -34,5 +34,13 @@ class UsuarioService {
         const { data } = await axios.get(`${REST_SERVER_URL}/usuarios/noAmigos/${id}`)
         return data.map(noAmigo => Usuario.fromJson(noAmigo))
     }
+
+    async agregarAmigo(nuevoAmigo) {
+        const id = this.userLogged.id
+        const { data } = await axios.put(`${REST_SERVER_URL}/usuarios/${id}/agregarAmigo/${nuevoAmigo.id}`)
+        return Usuario.fromJson(data) 
+    }
+
+    
 }
 export const usuarioService = new UsuarioService()

@@ -15,7 +15,8 @@ class Perfil extends Component {
     this.state = {
       usuario: new Usuario(),
       mostrarModal: false,
-      noAmigos:[]
+      noAmigos:[],
+      noAmigoSeleccionado: null
     };
   }
 
@@ -59,7 +60,7 @@ class Perfil extends Component {
       const noAmigos = await usuarioService.getNoAmigos();
       this.setState({noAmigos: noAmigos , mostrarModal: true});
     } catch (e) {
-      console.error(e)
+      console.log(e)
       //this.addMessages(e)
     }
   }
@@ -74,6 +75,27 @@ class Perfil extends Component {
 
   nombreYApellidoNoAmigo(amigo) {
     return amigo.nombre  + " " + amigo.apellido
+   }
+
+   setNoAmigo(noAmigo) {
+     this.setState({noAmigoSeleccionado: noAmigo})
+   }
+
+  agregarAmigo = async () => {
+     try {
+       const usuarioLogueado = await usuarioService.agregarAmigo(this.state.noAmigoSeleccionado)
+       this.setState({mostrarModal: false, usuario: usuarioLogueado})
+     }catch(e) {
+       //this.addMessages(e)
+     }
+   }
+
+   guardarCambios = async () => {
+     try {
+       const usuario = await usuarioService.actualizarUsuario(this.state.usuario)
+     }catch(e) {
+
+     }
    }
 
   cancelar() {
@@ -125,31 +147,35 @@ class Perfil extends Component {
           onHide={() => this.cerrar()}
           baseZIndex={1000}
         >
-          <section>
-          <DataTable value={this.state.noAmigos} scrollable scrollHeight="100px">
-            <Column body={this.nombreYApellidoNoAmigo}></Column>
+          <section className="tabla-popup">
+          <DataTable value={this.state.noAmigos} scrollable scrollHeight="100px" selection={this.state.noAmigoSeleccionado} onSelectionChange={evento => this.setNoAmigo(evento.value)}>
+          <Column selectionMode="single" headerStyle={{width: '3em'}}></Column>
+            <Column body={this.nombreYApellidoNoAmigo} header="Cuantos mas amigos agregas mas preguntas tendras">
+            </Column>
           </DataTable>
+          <section className="centrar">
+          <Button onClick={this.agregarAmigo} label="Guardar" className="p-button-rounded p-button-help" />
           </section>
-
-
-
+          </section>
         </Dialog>
 
-        <section className="tabla">
+        <section className="tabla-amigos">
           <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
             <Column body={this.nombreYApellidoAmigo} header="Mis Amigos"></Column>
           </DataTable>
         </section>
 
-        <section>
+        <section className="tabla-respuestas">
           <h3>Preguntas Respondidas</h3>
-          {/* <DataTable value={this.state.usuario.amigos} scrollable scrollHeight="100px">
-            <Column body={this.nombreYApellido}></Column>
-          </DataTable> */}
-
+          <DataTable value={this.state.usuario.preguntasRespondidas} scrollable scrollHeight="100px">
+            <Column field="pregunta" header="Preguntas"></Column>
+            <Column field="fechaRespuesta" header="Fecha de respuesta"></Column>
+            <Column field="puntos" header="Puntos"></Column>
+          </DataTable>
         </section>
+
         <section className="botonera">
-        <Button label="Aceptar" className="p-button-rounded p-button-success" />
+        <Button label="Aceptar" onClick={()=> this.guardarCambios()} className="p-button-rounded p-button-success" />
         <Button label="Cancelar" onClick={() => this.cancelar()} className="p-button-rounded p-button-danger" />
         </section>
       </div>
