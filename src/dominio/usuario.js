@@ -12,9 +12,7 @@ export default class Usuario {
     }
 
     static fromJson(usuarioJSON) {
-
-        return Object.assign(new Usuario(), usuarioJSON,
-        {fechaDeNacimiento : convertirADate(usuarioJSON.fechaDeNacimiento)})
+        return Object.assign(new Usuario(), usuarioJSON)
     }
 
     toJSON() {
@@ -22,9 +20,4 @@ export default class Usuario {
           ...this,
         }
       }
-}
-
-export function convertirADate(fecha) {
-  var parts = fecha.split('-')
-  return new Date(parts[0],parts[1]-1,parts[2])
 }

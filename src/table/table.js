@@ -80,7 +80,9 @@ const Table = ({history, match}) => {
     }
     
     const actualizarUser = async () => {
-       // await usuarioService.actualizarUsuario(usuarioService.userLogged)
+        console.log(pregunta)
+        //sumar puntaje
+        //await usuarioService.actualizarUsuario(usuarioService.userLogged)
     }
     
     const aceptar = async () => {

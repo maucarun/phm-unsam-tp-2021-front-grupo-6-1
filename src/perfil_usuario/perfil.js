@@ -15,21 +15,22 @@ class Perfil extends Component {
     this.state = {
       usuario: new Usuario(),
       mostrarModal: false,
-      noAmigos:[]
+      noAmigos:[],
+      fechaDeNac: ""
     };
   }
 
   async componentDidMount() {
     try {
       const usuario = await usuarioService.getUsuario(
-        usuarioService.userLogged.id
-      );
-      this.cambiarEstado(usuario);
-    } catch (e) {
-      //this.addMessages(e)
-    }
+        usuarioService.userLogged.id,
+        );
+        this.cambiarEstado(usuario);
+      } catch (e) {
+        //this.addMessages(e)
+      }
   }
-
+  
   setNombre(nombre_usuario) {
     const usuario = this.state.usuario;
     usuario.nombre = nombre_usuario;
@@ -39,6 +40,7 @@ class Perfil extends Component {
   cambiarEstado(usuario) {
     this.setState({
       usuario: usuario,
+      fechaDeNac: usuario.fechaDeNacimiento.toString(),
     });
   }
 
@@ -80,6 +82,11 @@ class Perfil extends Component {
     this.props.history.push('/busqueda')
   }
 
+  convertirADate() {
+    var parts = this.state.fechaDeNac.split('-')
+    return new Date(parts[0],parts[1]-1,parts[2])
+  }
+
   render() {
     return (
       <div className="card">
@@ -105,7 +112,7 @@ class Perfil extends Component {
         <section className="inputs1">
           <h5>Nacimiento</h5>
           <Calendar
-            value={this.state.usuario.fechaDeNacimiento}
+            value={this.convertirADate()}
             onChange={(event) => this.setFechaDeNacimiento(event.value)}
             showIcon
           ></Calendar>
