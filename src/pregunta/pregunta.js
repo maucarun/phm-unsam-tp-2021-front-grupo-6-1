@@ -18,11 +18,12 @@ class PreguntaPage extends Component {
         super(props);
         this.state = {
             pregunta: new Pregunta(),
+            descripcionPregunta: '',
+            opciones: [],
             usuario: new Usuario(),
             tipoSeleccionado: null,
             mensajeDeError: false,
             nuevaOpcionVacia: false,
-            opciones: [],
             nuevaOpcion: '',
         };
 
@@ -45,9 +46,11 @@ class PreguntaPage extends Component {
             const pregunta = await preguntaService.getPregunta(this.props.match.params.id)
             this.setState({
                 pregunta: pregunta,
+                descripcionPregunta: pregunta.descripcion,
             })
             console.log(this.state.pregunta)
             console.log(this.state.pregunta.autor)
+            console.log(this.state.pregunta.respuestaCorrecta)
             this.convertirOpciones(this.state.pregunta.opciones)
         } catch (e) {
             console.log("fallo2")
@@ -62,6 +65,11 @@ class PreguntaPage extends Component {
         const opcionesConvertidas = []
         options.forEach(op => {
             opcionesConvertidas.push({ descripcion: op, elegida: false })
+        })
+        opcionesConvertidas.forEach(op => {
+            if (op.descripcion == this.state.pregunta.respuestaCorrecta) {
+                op.elegida = true
+            }
         })
         this.setOpciones(opcionesConvertidas)
         console.log(this.state.opciones)
@@ -101,7 +109,7 @@ class PreguntaPage extends Component {
 
     seleccionarOpcion = (opcion) => {
         return (
-            <Checkbox className="chckbx" onChange={() => setChckbx(opcion)} checked={opcion.elegida}></Checkbox>
+            <Checkbox className="chckbx" onChange={() => this.setChckbx(opcion)} checked={opcion.elegida}></Checkbox>
         )
     }
 
@@ -118,16 +126,18 @@ class PreguntaPage extends Component {
             }
             return op
         })
-        setOpciones(updatedOptions)
+        this.setOpciones(updatedOptions)
     }
 
     aceptar = async () => {
-        if (soloUnaOpcionSeleccionada()) {
+        if (this.soloUnaOpcionSeleccionada()) {
             this.setState(
                 { mensajeDeError: false }
             )
-            usuarioService.userLogged.preguntasRespondidas.push(pregunta)
-            await usuarioService.actualizarUsuario(usuarioService.userLogged)
+            const opcionCorrecta = this.state.opciones.find((op) => op.elegida == true)
+            this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
+            this.state.pregunta.descripcion = this.state.descripcionPregunta
+            await preguntaService.actualizarPregunta(this.state.pregunta)
             this.props.history.push("/busqueda")
         } else {
             this.setState(
@@ -137,11 +147,11 @@ class PreguntaPage extends Component {
     }
 
     cancelar = () => {
-        this.props.history.push(`/pregunta/${this.props.match.params.id}`)
+        this.props.history.push("/busqueda")
     }
 
     soloUnaOpcionSeleccionada = () => {
-        const opcionesSeleccionadas = opciones.filter(op => op.elegida === true)
+        const opcionesSeleccionadas = this.state.opciones.filter(op => op.elegida === true)
         return opcionesSeleccionadas.length === 1
     }
 
@@ -152,11 +162,11 @@ class PreguntaPage extends Component {
     render() {
         return (
             <div className="preguntaBody">
+                <span className="autor">Autor: {this.state.pregunta.autor.nombre} {this.state.pregunta.autor.apellido}</span>
                 <section className="encabezado">
-                    <span className="autor">Autor: {this.state.pregunta.autor.nombre} {this.state.pregunta.autor.apellido}</span>
-                    <h1>
-                        {this.state.pregunta.descripcion}
-                    </h1>
+                    <div className="tituloPregunta">
+                        <InputText className="descripcionPregunta" value={this.state.descripcionPregunta} onChange={(e) => this.setState({ descripcionPregunta: e.target.value })} />
+                    </div>
                 </section>
 
                 <div className="tipoPregunta">
@@ -169,10 +179,10 @@ class PreguntaPage extends Component {
                 <div>
 
                     <div className="opciones">
-                        <DataTable value={this.state.opciones} autoLayout={true}>
-                            <Column className="desc" field="descripcion" ></Column>
-                            <Column body={this.seleccionarOpcion}></Column>
-                            <Column body={this.borrarOpcion}></Column>
+                        <DataTable className="table" value={this.state.opciones} scrollable scrollHeight="300px" >
+                            <Column field="descripcion" style={{ width: '80%' }} ></Column>
+                            <Column body={this.seleccionarOpcion} style={{ width: '10%' }}></Column>
+                            <Column body={this.borrarOpcion} style={{ width: '10%' }}></Column>
                         </DataTable>
                     </div>
 

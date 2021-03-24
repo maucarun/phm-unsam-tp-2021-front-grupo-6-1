@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, createRef} from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import {Checkbox} from 'primereact/checkbox';
@@ -9,7 +9,7 @@ import Pregunta from "../dominio/pregunta";
 import { usuarioService } from "../services/usuario-service";
 import { confirmPopup } from 'primereact/confirmpopup'
 import { Dialog } from 'primereact/dialog';
-
+import { Toast } from 'primereact/toast';
 
 const Table = ({history, match}) => {
 
@@ -17,6 +17,7 @@ const Table = ({history, match}) => {
         await buscarPregunta()
     }, [])
     
+    const toast = createRef()
     const [pregunta, setPregunta] = useState(new Pregunta())
     const [opciones, setOpciones] = useState([])
     const [mensajeDeError, setMensajeDeError] = useState(false)
@@ -26,11 +27,15 @@ const Table = ({history, match}) => {
     const [displayIncorrect, setDisplayIncorrect] = useState(false)
     
     const buscarPregunta = async () => {
-        const preg = await preguntaService.getPregunta(match.params.id)
-        setPregunta(preg)
-        setNombreAutor(preg.autor.nombre)
-        setApellidoAutor(preg.autor.apellido)
-        convertirOpciones(preg.opciones)
+        try {
+            const preg = await preguntaService.getPregunta(match.params.id)
+            setPregunta(preg)
+            setNombreAutor(preg.autor.nombre)
+            setApellidoAutor(preg.autor.apellido)
+            convertirOpciones(preg.opciones)
+        } catch(error) {
+            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar la pregunta', detail: error.message, life: 3000})
+        }
     }
     
     const convertirOpciones = (options) => {
@@ -80,7 +85,12 @@ const Table = ({history, match}) => {
     }
     
     const actualizarUser = async () => {
-       // await usuarioService.actualizarUsuario(usuarioService.userLogged)
+        //sumar puntaje
+        try {
+            await usuarioService.actualizarUsuario(usuarioService.userLogged)
+        } catch(error) {
+            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al actualizar sus datos', detail: error.message, life: 3000})
+        }
     }
     
     const aceptar = async () => {
@@ -145,6 +155,7 @@ const Table = ({history, match}) => {
             <Dialog header="Incorrecto" visible={displayIncorrect} style={{ width: '50vw' }} onHide={() => cerrarPantallaIncorrect()}>
                 <span className="no-congratulations">Su respuesta es incorrecta. Siga intentando. </span>
             </Dialog>
+            <Toast ref={toast} />
         </div>
     )
 }

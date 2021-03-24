@@ -15,12 +15,16 @@ class PreguntaService {
     }
 
     async allInstances(soloActivas) {
-        const {data} = await axios.get(`${REST_SERVER_URL}/preguntasAll/${soloActivas}`)
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntasAll/${soloActivas}`)
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
     async actualizarPregunta(pregunta) {
         return await axios.put(`${REST_SERVER_URL}/pregunta/${pregunta.id}`, pregunta.toJSON())
+    }
+
+    async crearPregunta(pregunta) {
+        return await axios.post(`${REST_SERVER_URL}/nuevaPregunta`, pregunta.toJSON())
     }
 
 }

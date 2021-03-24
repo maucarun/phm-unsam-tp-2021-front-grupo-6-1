@@ -1,54 +1,65 @@
 .preguntaBody {
-    width: 50rem;
-    margin: 2rem auto;
-    background-color: white;
-    height: 90%;
-    /* margin-bottom: 300px; */
-    display: flex;
-    flex-direction: column;
+  width: 50rem;
+  margin: 2rem auto;
+  background-color: white;
+  height: 90%;
+  margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
 }
-  
-.encabezado {
-    height: 5rem;
-    background-color: turquoise;
-    display: flex;
-    justify-content: space-between;
+
+/* .encabezado {
+  height: 5rem;
+  background-color: turquoise;
+  display: flex;
+  justify-content: space-between;
+} */
+
+.tituloPregunta {
+  margin-left: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
-  
-.tabla {
-    width: 15rem;
-    margin-left: auto;
-    margin-right: 2rem;
+
+.descripcionPregunta {
+  font-size: 26px;
+  width: 90%;
+  background-color: turquoise;
+  font-weight: bold;
+  color: black;
+  border: 2px white solid;
 }
 
 .dropdown .p-dropdown {
-    width: 14rem;
+  width: 14rem;
 }
 
 .tipoPregunta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 55px 0 55px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 55px 0 55px;
 }
 
 .opciones {
-    margin: 0 55px 0 55px;
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  width: 90%;
 }
 
 .label {
-    margin-left: 55px;
+  margin-left: 55px;
 }
 
-.desc{
-    width: 85%;
-}
-
-.agregar{
-    display: flex;
-    margin-right: 55px;
+.agregar {
+  display: flex;
+  margin-right: 55px;
 }
 
 .agregarOpcion {
-    width: 95%;
+  width: 95%;
 }
