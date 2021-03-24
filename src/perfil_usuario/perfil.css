@@ -2,6 +2,7 @@
   width: 50rem;
   margin: 2rem auto;
   background-color: white;
+  border: 2px solid #006064;
 }
 
 .encabezado {
@@ -17,14 +18,28 @@
   justify-content: space-evenly;
 }
 
-.tabla {
+.tabla-amigos {
     width: 15rem;
     margin-left: auto;
     margin-right: 2rem;
 }
 
-.tabla th {
-  background-color: #ff9ee3 !important;
+.tabla-amigos th {
+  background-color: #ff9ee3;
+}
+
+.tabla-popup th {
+  background-color: #ff9ee3;
+}
+
+.tabla-respuestas th {
+  background-color: #ff9ee3;
+}
+
+.centrar {
+  display: flex;
+  justify-content: center;
+
 }
 
 .botonera {
