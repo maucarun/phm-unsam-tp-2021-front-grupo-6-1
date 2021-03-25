@@ -1,5 +1,5 @@
 export default class Usuario {
-    constructor(id, nombre, apellido, puntaje, userName, password, fechaDeNacimiento, preguntasRespondidas) {
+    constructor(id, nombre, apellido, puntaje, userName, password, fechaDeNacimiento, respuestas) {
         this.id = id
         this.nombre = nombre
         this.apellido = apellido
@@ -8,7 +8,7 @@ export default class Usuario {
         this.password = password
         this.amigos = new Set()
         this.puntaje = puntaje
-        this.preguntasRespondidas = new Set()
+        this.respuestas = respuestas
     }
 
     static fromJson(usuarioJSON) {

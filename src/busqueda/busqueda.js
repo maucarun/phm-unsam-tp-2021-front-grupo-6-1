@@ -33,9 +33,9 @@ const Busqueda = ({history}) => {
     const seleccionarButton = (preguntaCell) => {
         return(
             preguntaCell.autor.userName === usuarioService.userLogged.userName ?
-            <Button id="button-column" label="Editar" onClick={() => navegarAEdicion(preguntaCell.id)}/>
+            <Button className="p-button-rounded p-button-Primary" id="button-column" label="Editar" onClick={() => navegarAEdicion(preguntaCell.id)}/>
             :
-            <Button id="button-column" label="Responder" onClick={() => navegarAResponder(preguntaCell.id)}/>
+            <Button className="p-button-rounded p-button-Primary" id="button-column" label="Responder" onClick={() => navegarAResponder(preguntaCell.id)}/>
         )
     }
 
@@ -89,7 +89,7 @@ const Busqueda = ({history}) => {
                 </DataTable>
             </div>
             <div className="button-bottom">
-                <Button label="Nueva Pregunta" onClick={navegarANueva}/>
+                <Button className="p-button-rounded p-button-Primary" label="Nueva Pregunta" onClick={navegarANueva}/>
             </div>
             <Toast ref={toast} />
         </React.Fragment>
