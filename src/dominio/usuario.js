@@ -11,6 +11,19 @@ export default class Usuario {
         this.respuestas = respuestas
     }
 
+    validar() {
+      if(this.nombre == "") {
+        throw new Error("Debe ingresar Nombre")
+      }
+      if(this.apellido=="") {
+        throw new Error("Debe ingresar Apellido")
+      }
+      if(this.fechaDeNacimiento>new Date()) {
+        throw new Error("Fecha de nacimiento incorrecta")
+
+      }
+    }
+
     static fromJson(usuarioJSON) {
         return Object.assign(new Usuario(), usuarioJSON)
     }

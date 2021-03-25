@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, createRef } from "react";
 import "./perfil.css";
 import { InputText } from "primereact/inputtext";
 import Usuario from "../dominio/usuario";
@@ -8,8 +8,12 @@ import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
+import { Toast } from 'primereact/toast';
 
 class Perfil extends Component {
+  
+  toast = createRef()
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -20,6 +24,7 @@ class Perfil extends Component {
       fechaDeNac: ""
     };
   }
+
 
   async componentDidMount() {
     try {
@@ -87,6 +92,7 @@ class Perfil extends Component {
      try {
        const usuarioLogueado = await usuarioService.agregarAmigo(this.state.noAmigoSeleccionado)
        this.setState({mostrarModal: false, usuario: usuarioLogueado})
+       this.toast.current.show({ severity: 'success', summary: "Bien" , detail: "Has Agregado un nuevo amigo", life: 3000})
      }catch(e) {
        //this.addMessages(e)
      }
@@ -94,9 +100,10 @@ class Perfil extends Component {
 
    guardarCambios = async () => {
      try {
-       const usuario = await usuarioService.actualizarUsuario(this.state.usuario)
+       this.state.usuario.validar()
+       const usuario = await usuarioService.modificarUsuario(this.state.usuario)
      }catch(e) {
-
+      this.toast.current.show({ severity: 'error', summary: "Error" , detail: e.message, life: 3000})
      }
    }
 
@@ -185,6 +192,7 @@ class Perfil extends Component {
         <Button label="Aceptar" onClick={()=> this.guardarCambios()} className="p-button-rounded p-button-success" />
         <Button label="Cancelar" onClick={() => this.cancelar()} className="p-button-rounded p-button-danger" />
         </section>
+        <Toast ref={this.toast} />
       </div>
     );
   }
