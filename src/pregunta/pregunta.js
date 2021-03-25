@@ -27,7 +27,7 @@ class PreguntaPage extends Component {
             autor: '',
             nueva: false,
             tipo: '',
-            tipoValor: ''
+            tipoLabel: ''
         };
 
         this.selectItems = [
@@ -47,7 +47,6 @@ class PreguntaPage extends Component {
                 console.log("creo nueva")
                 this.setState({
                     autor: this.state.usuario.nombre + ' ' + this.state.usuario.apellido,
-                    //id: 0
                     nueva: true,
                 })
                 console.log("creo nueva2")
@@ -61,9 +60,8 @@ class PreguntaPage extends Component {
                     tipo: pregunta.type,
                 })
                 this.convertirOpciones(this.state.pregunta.opciones)
-                const tipoValor = this.mapearTipo(this.state.tipo)
-                this.setState({ tipoValor: tipoValor })
-                console.log(this.mapearTipo(this.state.tipo))
+                const tipoLabel = this.mapearTipo()
+                this.setState({ tipoLabel: tipoLabel })
             }
         } catch (e) {
             //console.log("fallo2")
@@ -74,9 +72,10 @@ class PreguntaPage extends Component {
         this.setState({ tipo: e.value });
     }
 
-    mapearTipo(tipo) {
-        const tipa = (this.selectItems.find(t => t.value == tipo))
-        return tipa.label
+    mapearTipo() {
+        const tipo = this.state.tipo
+        const tipoLabel = (this.selectItems.find(t => t.value == tipo))
+        return tipoLabel.label
     }
 
     convertirOpciones = (options) => {
@@ -138,7 +137,7 @@ class PreguntaPage extends Component {
 
     borrarOpcion = (opcion) => {
         return (
-            <Button icon="pi pi-trash" onClick={() => this.eliminarOpcion(opcion.descripcion)}></Button>
+            <Button icon="pi pi-trash" className="p-button-rounded" onClick={() => this.eliminarOpcion(opcion.descripcion)}></Button>
         )
     }
 
@@ -152,42 +151,58 @@ class PreguntaPage extends Component {
         this.setOpciones(updatedOptions)
     }
 
+    descripcionVacia() {
+        return this.state.descripcionPregunta == '' || this.state.descripcionPregunta == ' ' || this.state.descripcionPregunta == null
+    }
+
+    tipoNoSeleccionado() {
+        return this.state.tipo == '' || this.state.tipo == ' ' || this.state.tipo == null
+    }
+
     aceptar = async () => {
-        if (this.soloUnaOpcionSeleccionada()) {
+        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia()) {
             this.setState(
-                { mensajeDeError: false }
+                { mensajeDeError: true }
             )
+        } else {
             const opcionCorrecta = this.state.opciones.find(op => op.elegida == true)
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
             this.state.pregunta.descripcion = this.state.descripcionPregunta
             this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
             await preguntaService.actualizarPregunta(this.state.pregunta)
             this.props.history.push("/busqueda")
-        } else {
-            this.setState(
-                { mensajeDeError: true }
-            )
         }
     }
 
     crear = async () => {
-        if (this.soloUnaOpcionSeleccionada()) {
+        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia() || this.tipoNoSeleccionado()) {
             this.setState(
-                { mensajeDeError: false }
+                { mensajeDeError: true }
             )
+        }
+        else {
             const opcionCorrecta = this.state.opciones.find(op => op.elegida == true)
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
             this.state.pregunta.descripcion = this.state.descripcionPregunta
             this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
             this.state.pregunta.autor = this.state.usuario
-            this.state.pregunta.tipo = this.state.tipo
+            this.state.pregunta.type = this.state.tipo
+            this.state.pregunta.fechaHoraCreacion = this.horaActual()
             await preguntaService.nuevaPregunta(this.state.pregunta)
             this.props.history.push("/busqueda")
-        } else {
-            this.setState(
-                { mensajeDeError: true }
-            )
         }
+    }
+
+    horaActual() {
+        var date = new Date()
+        var horaActual =
+            date.getFullYear() + "-" +
+            ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("00" + date.getDate()).slice(-2) + " " +
+            ("00" + date.getHours()).slice(-2) + ":" +
+            ("00" + date.getMinutes()).slice(-2) + ":" +
+            ("00" + date.getSeconds()).slice(-2);
+        return horaActual
     }
 
     cancelar = () => {
@@ -219,11 +234,10 @@ class PreguntaPage extends Component {
                     <div className="dropdown">
                         {this.state.nueva && <Dropdown value={this.state.tipo} options={this.selectItems} onChange={this.seleccionarTipo} placeholder="Opciones" />}
                     </div>
-                    {!this.state.nueva && <div>{this.state.tipoValor}</div>}
+                    {!this.state.nueva && <div className="tipo"> {this.state.tipoLabel}</div>}
                 </div>
 
                 <div>
-
                     <div className="opciones">
                         <DataTable className="table" value={this.state.opciones} scrollable scrollHeight="300px" >
                             <Column field="descripcion" style={{ width: '80%' }} ></Column>
@@ -240,19 +254,21 @@ class PreguntaPage extends Component {
                                 <InputText className="agregarOpcion" onChange={(e) => this.setState({ nuevaOpcion: e.target.value })} ref={(el) => (this.opcion = el)} />
                             </section>
                             <section>
-                                <Button label="Agregar" className="p-button-primary" onClick={() => this.agregarOpcion(this.state.nuevaOpcion)} />
+                                <Button label="Agregar" className="p-button-rounded p-button-primary" onClick={() => this.agregarOpcion(this.state.nuevaOpcion)} />
                             </section>
                         </div>
                     </div>
 
                     <div className="buttonsdiv">
                         <div>
-                            {this.state.mensajeDeError && <span className="validacion-opciones">Debe seleccionar solo una opción</span>}
+                            {this.state.mensajeDeError && !this.soloUnaOpcionSeleccionada() && <span className="validacion-opciones">Debe seleccionar una opción</span>}
+                            {this.state.mensajeDeError && this.descripcionVacia() && <div className="validacion-opciones">La pregunta no puede estar vacía</div>}
+                            {this.state.mensajeDeError && this.tipoNoSeleccionado() && <div className="validacion-opciones">Debe elegir el tipo de pregunta</div>}
                         </div>
-                        <div className="buttons">
-                            {this.state.nueva && <Button label="Aceptar" className="p-button-primary" onClick={() => this.crear()} />}
-                            {!this.state.nueva && <Button label="Aceptar" className="p-button-primary" onClick={() => this.aceptar()} />}
-                            <Button label="Cancelar" className="p-button-secondary" onClick={() => this.cancelar()} />
+                        <div className="botones">
+                            {this.state.nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.crear()} />}
+                            {!this.state.nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.aceptar()} />}
+                            <Button label="Cancelar" className="p-button-rounded p-button-danger" onClick={() => this.cancelar()} />
                         </div>
                     </div>
 
