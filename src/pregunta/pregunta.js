@@ -21,7 +21,6 @@ class PreguntaPage extends Component {
             descripcionPregunta: '',
             opciones: [],
             usuario: new Usuario(),
-            tipoSeleccionado: null,
             mensajeDeError: false,
             nuevaOpcionVacia: false,
             nuevaOpcion: '',
@@ -60,8 +59,8 @@ class PreguntaPage extends Component {
                     descripcionPregunta: pregunta.descripcion,
                     tipo: pregunta.type,
                 })
-                console.log(this.state.pregunta.type)
                 this.convertirOpciones(this.state.pregunta.opciones)
+                console.log(this.mapearTipo(this.state.tipo))
             }
         } catch (e) {
             //console.log("fallo2")
@@ -69,7 +68,12 @@ class PreguntaPage extends Component {
     }
 
     seleccionarTipo(e) {
-        this.setState({ tipoSeleccionado: e.value });
+        this.setState({ tipo: e.value });
+    }
+
+    mapearTipo(tipo) {
+        const tipa = (this.selectItems.find(t => t.value == tipo))
+        return tipa.label
     }
 
     convertirOpciones = (options) => {
@@ -150,7 +154,7 @@ class PreguntaPage extends Component {
             this.setState(
                 { mensajeDeError: false }
             )
-            const opcionCorrecta = this.state.opciones.find((op) => op.elegida == true)
+            const opcionCorrecta = this.state.opciones.find(op => op.elegida == true)
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
             this.state.pregunta.descripcion = this.state.descripcionPregunta
             this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
@@ -168,11 +172,12 @@ class PreguntaPage extends Component {
             this.setState(
                 { mensajeDeError: false }
             )
-            const opcionCorrecta = this.state.opciones.find((op) => op.elegida == true)
+            const opcionCorrecta = this.state.opciones.find(op => op.elegida == true)
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
             this.state.pregunta.descripcion = this.state.descripcionPregunta
             this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
             this.state.pregunta.autor = this.state.usuario
+            this.state.pregunta.tipo = this.state.tipo
             await preguntaService.nuevaPregunta(this.state.pregunta)
             this.props.history.push("/busqueda")
         } else {
@@ -209,8 +214,9 @@ class PreguntaPage extends Component {
                 <div className="tipoPregunta">
                     <h2>Tipo de Pregunta</h2>
                     <div className="dropdown">
-                        <Dropdown value={this.state.tipoSeleccionado} options={this.selectItems} onChange={this.seleccionarTipo} placeholder="Opciones" />
+                        {this.state.nueva && <Dropdown value={this.state.tipo} options={this.selectItems} onChange={this.seleccionarTipo} placeholder="Opciones" />}
                     </div>
+                    {/* {!this.state.nueva && <div>{this.mapearTipo(this.state.tipo)}</div>} */}
                 </div>
 
                 <div>
