@@ -3,36 +3,36 @@
 } */
 
 .cardLogin {
-    width: 30%;
-    margin-bottom: 53px;
+  width: 30%;
+  margin-bottom: 53px;
 }
 
 .centrado {
-   background-color: #abc2c4;
-   height: 100%;
-   display: flex; 
-   justify-content: center;
-   align-items: center;
+  /* background-color: cadetblue; */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .titulo {
-    text-align: center;
-    font-size: 3em;
-    font-weight: bold;
+  text-align: center;
+  font-size: 3em;
+  font-weight: bold;
 }
 
 .margin-top {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .p-fluid {
-    padding: 0 35px 0 35px;
+  padding: 0 35px 0 35px;
 }
 
 .mensaje-error {
-    width: 100%;
-    display: flex; 
-    justify-content: center;
-    color: red;
-    font-weight: bold;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: red;
+  font-weight: bold;
 }

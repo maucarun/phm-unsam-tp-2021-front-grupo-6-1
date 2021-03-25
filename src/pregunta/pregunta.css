@@ -23,12 +23,12 @@
 }
 
 .descripcionPregunta {
-  font-size: 26px;
+  font-size: 26px !important;
   width: 90%;
-  background-color: turquoise;
-  font-weight: bold;
-  color: black;
-  border: 2px white solid;
+  background-color: turquoise !important;
+  font-weight: bold !important;
+  color: black !important;
+  border: 2px white solid !important;
 }
 
 .dropdown .p-dropdown {
@@ -67,6 +67,19 @@
 
 .agregarOpcion {
   width: 95%;
+}
+
+.puntos {
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.puntos-texto {
+  display: flex;
+  align-items: center;
+  padding-right: 5px;
+  font-weight: bold;
 }
 
 .botones {

@@ -21,13 +21,15 @@ class PreguntaPage extends Component {
             descripcionPregunta: '',
             opciones: [],
             usuario: new Usuario(),
+            puntajeUsuario: null,
             mensajeDeError: false,
             nuevaOpcionVacia: false,
             nuevaOpcion: '',
             autor: '',
             nueva: false,
             tipo: '',
-            tipoLabel: ''
+            tipoLabel: '',
+            puntos: 0,
         };
 
         this.selectItems = [
@@ -44,32 +46,36 @@ class PreguntaPage extends Component {
             this.state.usuario = await usuarioService.getUsuario(usuarioService.userLogged.id);
             const idPregunta = this.props.match.params.id
             if (idPregunta == "nueva") {
-                console.log("creo nueva")
                 this.setState({
                     autor: this.state.usuario.nombre + ' ' + this.state.usuario.apellido,
                     nueva: true,
+                    puntajeUsuario: this.state.usuario.puntaje
                 })
-                console.log("creo nueva2")
             }
             else {
-                console.log("edicion")
                 const pregunta = await preguntaService.getPregunta(idPregunta)
                 this.setState({
                     pregunta: pregunta,
                     descripcionPregunta: pregunta.descripcion,
                     tipo: pregunta.type,
+                    puntos: pregunta.puntos,
+                    puntajeUsuario: this.state.usuario.puntaje
                 })
                 this.convertirOpciones(this.state.pregunta.opciones)
                 const tipoLabel = this.mapearTipo()
                 this.setState({ tipoLabel: tipoLabel })
             }
         } catch (e) {
-            //console.log("fallo2")
+            //console.log("fallo")
         }
     }
 
     seleccionarTipo(e) {
         this.setState({ tipo: e.value });
+    }
+
+    esSolidaria() {
+        return this.state.tipo == 'solidaria'
     }
 
     mapearTipo() {
@@ -159,8 +165,20 @@ class PreguntaPage extends Component {
         return this.state.tipo == '' || this.state.tipo == ' ' || this.state.tipo == null
     }
 
+    puntosVacios() {
+        return this.state.puntos == '' || this.state.puntos == ' ' || this.state.puntos == null
+    }
+
+    puntosValidos() {
+        if (!this.esSolidaria()) {
+            return true
+        } else {
+            return (this.state.puntos >= 1 && this.state.puntos <= this.state.puntajeUsuario && !this.puntosVacios())
+        }
+    }
+
     aceptar = async () => {
-        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia()) {
+        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia() || !this.puntosValidos()) {
             this.setState(
                 { mensajeDeError: true }
             )
@@ -169,13 +187,14 @@ class PreguntaPage extends Component {
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
             this.state.pregunta.descripcion = this.state.descripcionPregunta
             this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
+            this.state.pregunta.puntos = parseInt(this.state.puntos)
             await preguntaService.actualizarPregunta(this.state.pregunta)
             this.props.history.push("/busqueda")
         }
     }
 
     crear = async () => {
-        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia() || this.tipoNoSeleccionado()) {
+        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia() || this.tipoNoSeleccionado() || !this.puntosValidos()) {
             this.setState(
                 { mensajeDeError: true }
             )
@@ -185,6 +204,7 @@ class PreguntaPage extends Component {
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
             this.state.pregunta.descripcion = this.state.descripcionPregunta
             this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
+            this.state.pregunta.puntos = parseInt(this.state.puntos)
             this.state.pregunta.autor = this.state.usuario
             this.state.pregunta.type = this.state.tipo
             this.state.pregunta.fechaHoraCreacion = this.horaActual()
@@ -259,22 +279,30 @@ class PreguntaPage extends Component {
                         </div>
                     </div>
 
-                    <div className="buttonsdiv">
-                        <div>
-                            {this.state.mensajeDeError && !this.soloUnaOpcionSeleccionada() && <span className="validacion-opciones">Debe seleccionar una opción</span>}
-                            {this.state.mensajeDeError && this.descripcionVacia() && <div className="validacion-opciones">La pregunta no puede estar vacía</div>}
-                            {this.state.mensajeDeError && this.tipoNoSeleccionado() && <div className="validacion-opciones">Debe elegir el tipo de pregunta</div>}
-                        </div>
-                        <div className="botones">
-                            {this.state.nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.crear()} />}
-                            {!this.state.nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.aceptar()} />}
-                            <Button label="Cancelar" className="p-button-rounded p-button-danger" onClick={() => this.cancelar()} />
-                        </div>
-                    </div>
+                    {this.esSolidaria() &&
+                        <div className="puntos">
+                            <div className="puntos-texto">Puntos:</div>
+                            <InputText value={this.state.puntos} onChange={(e) => this.setState({ puntos: e.target.value })} />
+                        </div>}
 
                 </div>
 
+                <div className="buttonsdiv">
+                    <div>
+                        {this.state.mensajeDeError && !this.puntosValidos() && <div className="validacion-opciones">Puntaje indicado es incorrecto</div>}
+                        {this.state.mensajeDeError && !this.soloUnaOpcionSeleccionada() && <span className="validacion-opciones">Debe seleccionar una opción</span>}
+                        {this.state.mensajeDeError && this.descripcionVacia() && <div className="validacion-opciones">El título de la pregunta no puede estar vacío</div>}
+                        {this.state.mensajeDeError && this.tipoNoSeleccionado() && <div className="validacion-opciones">Debe elegir el tipo de pregunta</div>}
+                    </div>
+                    <div className="botones">
+                        {this.state.nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.crear()} />}
+                        {!this.state.nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.aceptar()} />}
+                        <Button label="Cancelar" className="p-button-rounded p-button-danger" onClick={() => this.cancelar()} />
+                    </div>
+                </div>
+
             </div>
+
         );
     }
 }
