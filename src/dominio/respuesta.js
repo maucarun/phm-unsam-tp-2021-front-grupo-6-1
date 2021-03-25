@@ -6,8 +6,8 @@ export default class Respuesta {
     this.respuestaCorrecta = respuestaCorrecta
   }
 
-  static fromJson(usuarioJSON) {
-    return Object.assign(new Usuario(), usuarioJSON)
+  static fromJson(respuestaJSON) {
+    return Object.assign(new Respuesta(), respuestaJSON)
   }
 
   toJSON() {
