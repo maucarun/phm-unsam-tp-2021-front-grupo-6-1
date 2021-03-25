@@ -1,7 +1,7 @@
 import Usuario from "../dominio/usuario";
 
 export default class Pregunta {
-  constructor(id, descripcion, opciones, respuestaCorrecta, autor, puntos, type) {
+  constructor(id, descripcion, opciones, respuestaCorrecta, autor, puntos, type, activa) {
     this.id = id
     this.descripcion = descripcion
     this.opciones = opciones
@@ -9,6 +9,7 @@ export default class Pregunta {
     this.autor = new Usuario(autor)
     this.puntos = puntos
     this.type = type
+    this.activa = activa
   }
 
   static fromJson(preguntaJSON) {

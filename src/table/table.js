@@ -25,6 +25,7 @@ const Table = ({history, match}) => {
     const [apellidoAutor, setApellidoAutor] = useState("")
     const [displaySuccess, setDisplaySuccess] = useState(false)
     const [displayIncorrect, setDisplayIncorrect] = useState(false)
+    const [displayInactive, setDisplayInactive] = useState(false)
     
     const buscarPregunta = async () => {
         try {
@@ -77,10 +78,19 @@ const Table = ({history, match}) => {
     
     const acceptFunc = async (opcionElegida) => {
         await actualizarUser(opcionElegida)
-        if(opcionElegida === pregunta.respuestaCorrecta) {
-            setDisplaySuccess(true)
-        } else {
-            setDisplayIncorrect(true)
+        try {
+           const _pregunta = await preguntaService.getPregunta(match.params.id)
+           if(opcionElegida !== _pregunta.respuestaCorrecta) {
+               setDisplayIncorrect(true)
+           } else if(!_pregunta.activa) {
+               setDisplayInactive(true)
+           } else {
+               setDisplaySuccess(true)
+           }
+        } catch(error) {
+            console.log("No se trajo la pregunta")
+            console.log(_pregunta)
+            console.log(_pregunta.respuestaCorrecta)
         }
     }
     
@@ -131,6 +141,11 @@ const Table = ({history, match}) => {
         setDisplayIncorrect(false)
         history.push("/busqueda")
     }
+
+    const cerrarPantallaInactiva = () => {
+        setDisplayInactive(false)
+        history.push("/busqueda")
+    } 
     
     return(
         <div className="container-table">
@@ -154,6 +169,12 @@ const Table = ({history, match}) => {
                 <span className="congratulations">Usted ha respondido correctamente</span><br/>
                 <span className="congratulations">Puntos sumados: {pregunta.puntos}</span><br/>
                 <span className="congratulations">Puntos totales: {usuarioService.userLogged.puntaje}</span>
+            </Dialog>
+            <Dialog header="Incorrecto" visible={displayInactive} style={{ width: '50vw' }} onHide={() => cerrarPantallaInactiva()}>
+                <span className="no-active">Su respuesta es correcta</span><br/>
+                <span className="no-active">pero la pregunta respondida esta inactiva</span><br/>
+                <span className="no-active">No ha sumado puntos</span><br/>
+                <span className="no-active">Puntos totales: {usuarioService.userLogged.puntaje}</span>
             </Dialog>
             <Dialog header="Incorrecto" visible={displayIncorrect} style={{ width: '50vw' }} onHide={() => cerrarPantallaIncorrect()}>
                 <span className="no-congratulations">Su respuesta es incorrecta</span><br/>
