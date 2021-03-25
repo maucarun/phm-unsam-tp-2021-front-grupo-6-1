@@ -174,7 +174,7 @@ class Perfil extends Component {
 
         <section className="tabla-respuestas">
           <h3>Preguntas Respondidas</h3>
-          <DataTable value={this.state.usuario.preguntasRespondidas} scrollable scrollHeight="100px">
+          <DataTable value={this.state.usuario.respuestas} scrollable scrollHeight="100px">
             <Column field="pregunta" header="Preguntas"></Column>
             <Column field="fechaRespuesta" header="Fecha de respuesta"></Column>
             <Column field="puntos" header="Puntos"></Column>
