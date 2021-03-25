@@ -13,7 +13,7 @@ import { Toast } from 'primereact/toast';
 
 const Table = ({history, match}) => {
 
-    useEffect(async ()=>{
+    useEffect(async () => {
         await buscarPregunta()
     }, [])
     
@@ -75,19 +75,21 @@ const Table = ({history, match}) => {
 
     }
     
-    const acceptFunc = async (opcion) => {
-        if(opcion === pregunta.respuestaCorrecta) {
-            await actualizarUser()
+    const acceptFunc = async (opcionElegida) => {
+        await actualizarUser(opcionElegida)
+        if(opcionElegida === pregunta.respuestaCorrecta) {
             setDisplaySuccess(true)
         } else {
             setDisplayIncorrect(true)
         }
     }
     
-    const actualizarUser = async () => {
-        //sumar puntaje
+    const actualizarUser = async (opcionElegida) => {
+        const opcionJson = { "opcionElegida": opcionElegida,  "pregunta": pregunta.descripcion}
         try {
-            await usuarioService.actualizarUsuario(usuarioService.userLogged)
+            await usuarioService.actualizarUsuario(usuarioService.userLogged.id, pregunta.id, opcionJson)
+            usuarioService.userLogged = await usuarioService.getUsuario(usuarioService.userLogged.id)
+            //console.log(usuarioService.userLogged)
         } catch(error) {
             toast.current.show({ severity: 'error', summary: 'Ocurrió un error al actualizar sus datos', detail: error.message, life: 3000})
         }
