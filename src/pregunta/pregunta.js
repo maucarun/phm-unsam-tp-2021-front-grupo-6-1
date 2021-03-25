@@ -26,7 +26,8 @@ class PreguntaPage extends Component {
             nuevaOpcion: '',
             autor: '',
             nueva: false,
-            tipo: ''
+            tipo: '',
+            tipoValor: ''
         };
 
         this.selectItems = [
@@ -60,6 +61,8 @@ class PreguntaPage extends Component {
                     tipo: pregunta.type,
                 })
                 this.convertirOpciones(this.state.pregunta.opciones)
+                const tipoValor = this.mapearTipo(this.state.tipo)
+                this.setState({ tipoValor: tipoValor })
                 console.log(this.mapearTipo(this.state.tipo))
             }
         } catch (e) {
@@ -216,7 +219,7 @@ class PreguntaPage extends Component {
                     <div className="dropdown">
                         {this.state.nueva && <Dropdown value={this.state.tipo} options={this.selectItems} onChange={this.seleccionarTipo} placeholder="Opciones" />}
                     </div>
-                    {/* {!this.state.nueva && <div>{this.mapearTipo(this.state.tipo)}</div>} */}
+                    {!this.state.nueva && <div>{this.state.tipoValor}</div>}
                 </div>
 
                 <div>
