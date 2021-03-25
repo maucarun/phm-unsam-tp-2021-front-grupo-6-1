@@ -9,13 +9,13 @@ class PreguntaService {
         return Pregunta.fromJson(data)
     }
 
-    async getPreguntas(valorBusqueda, soloActivas) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/${valorBusqueda}/${soloActivas}`)
+    async getPreguntas(valorBusqueda, soloActivas, userId) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/${valorBusqueda}/${soloActivas}/${userId}`)
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
-    async allInstances(soloActivas) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/preguntasAll/${soloActivas}`)
+    async allInstances(soloActivas,userId) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntasAll/${soloActivas}/${userId}`)
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 

@@ -89,7 +89,6 @@ const Table = ({history, match}) => {
         try {
             await usuarioService.actualizarUsuario(usuarioService.userLogged.id, pregunta.id, opcionJson)
             usuarioService.userLogged = await usuarioService.getUsuario(usuarioService.userLogged.id)
-            //console.log(usuarioService.userLogged)
         } catch(error) {
             toast.current.show({ severity: 'error', summary: 'Ocurrió un error al actualizar sus datos', detail: error.message, life: 3000})
         }
@@ -152,10 +151,14 @@ const Table = ({history, match}) => {
                 </div>
             </div>
             <Dialog header="¡ Felicitaciones !" visible={displaySuccess} style={{ width: '50vw' }} onHide={() => cerrarPantallaSuccess()}>
-                <span className="congratulations">Usted ha respondido correctamente </span>
+                <span className="congratulations">Usted ha respondido correctamente</span><br/>
+                <span className="congratulations">Puntos sumados: {pregunta.puntos}</span><br/>
+                <span className="congratulations">Puntos totales: {usuarioService.userLogged.puntaje}</span>
             </Dialog>
             <Dialog header="Incorrecto" visible={displayIncorrect} style={{ width: '50vw' }} onHide={() => cerrarPantallaIncorrect()}>
-                <span className="no-congratulations">Su respuesta es incorrecta. Siga intentando. </span>
+                <span className="no-congratulations">Su respuesta es incorrecta</span><br/>
+                <span className="no-congratulations">No ha sumado puntos</span><br/>
+                <span className="no-congratulations">Puntos totales: {usuarioService.userLogged.puntaje}</span>
             </Dialog>
             <Toast ref={toast} />
         </div>
