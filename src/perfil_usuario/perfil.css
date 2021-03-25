@@ -25,15 +25,15 @@
 }
 
 .tabla-amigos th {
-  background-color: #ff9ee3;
+  background-color: #ff9ee3 !important;
 }
 
 .tabla-popup th {
-  background-color: #ff9ee3;
+  background-color: #ff9ee3 !important;
 }
 
 .tabla-respuestas th {
-  background-color: #ff9ee3;
+  background-color: #ff9ee3 !important;
 }
 
 .centrar {
