@@ -146,8 +146,8 @@ const Table = ({history, match}) => {
                     {mensajeDeError && <span className="validacion-opciones">Debe seleccionar solo una opcion</span>}
                 </div>
                 <div className ="buttons">
-                <Button label="Aceptar" className="p-button-primary" onClick={() => aceptar()} />
-                <Button label="Cancelar" className="p-button-secondary" onClick={() => cancelar()} />
+                <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => aceptar()} />
+                <Button label="Cancelar" className="p-button-rounded p-button-danger" onClick={() => cancelar()} />
                 </div>
             </div>
             <Dialog header="¡ Felicitaciones !" visible={displaySuccess} style={{ width: '50vw' }} onHide={() => cerrarPantallaSuccess()}>
