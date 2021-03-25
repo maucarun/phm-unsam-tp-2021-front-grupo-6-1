@@ -35,6 +35,11 @@
   width: 14rem;
 }
 
+.tipo {
+  font-size: 20px;
+  margin-right: 140px;
+}
+
 .tipoPregunta {
   display: flex;
   justify-content: space-between;
@@ -62,4 +67,12 @@
 
 .agregarOpcion {
   width: 95%;
+}
+
+.botones {
+  display: flex;
+  width: 30%;
+  justify-content: space-evenly;
+  margin-top: 2em;
+  margin-right: 2%;
 }
