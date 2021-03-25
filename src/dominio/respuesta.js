@@ -1,4 +1,4 @@
-export default class Respuesta {
+/* export default class Respuesta {
   constructor(pregunta, puntos, fechaRespuesta, respuestaCorrecta) {
     this.pregunta = pregunta
     this.puntos = puntos
@@ -15,4 +15,4 @@ export default class Respuesta {
       ...this,
     }
   }
-}
+} */
