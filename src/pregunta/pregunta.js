@@ -18,14 +18,12 @@ class PreguntaPage extends Component {
         super(props);
         this.state = {
             pregunta: new Pregunta(),
-            descripcionPregunta: '',
+            descripcion: '',
             opciones: [],
             usuario: new Usuario(),
-            puntajeUsuario: null,
             mensajeDeError: false,
             nuevaOpcionVacia: false,
             nuevaOpcion: '',
-            autor: '',
             nueva: false,
             tipo: '',
             tipoLabel: '',
@@ -43,27 +41,22 @@ class PreguntaPage extends Component {
 
     async componentDidMount() {
         try {
-            this.state.usuario = await usuarioService.getUsuario(usuarioService.userLogged.id);
+            const usuario = await usuarioService.getUsuario(usuarioService.userLogged.id);
+            this.setState({ usuario })
             const idPregunta = this.props.match.params.id
             if (idPregunta == "nueva") {
-                this.setState({
-                    autor: this.state.usuario.nombre + ' ' + this.state.usuario.apellido,
-                    nueva: true,
-                    puntajeUsuario: this.state.usuario.puntaje
-                })
+                this.setState({ nueva: true })
             }
             else {
                 const pregunta = await preguntaService.getPregunta(idPregunta)
                 this.setState({
-                    pregunta: pregunta,
-                    descripcionPregunta: pregunta.descripcion,
+                    pregunta,
+                    descripcion: pregunta.descripcion,
                     tipo: pregunta.type,
                     puntos: pregunta.puntos,
-                    puntajeUsuario: this.state.usuario.puntaje
                 })
-                this.convertirOpciones(this.state.pregunta.opciones)
-                const tipoLabel = this.mapearTipo()
-                this.setState({ tipoLabel: tipoLabel })
+                this.convertirOpciones()
+                this.setState({ tipoLabel: this.mapearTipo() })
             }
         } catch (e) {
             //console.log("fallo")
@@ -84,7 +77,8 @@ class PreguntaPage extends Component {
         return tipoLabel.label
     }
 
-    convertirOpciones = (options) => {
+    convertirOpciones = () => {
+        const options = this.state.pregunta.opciones
         const opcionesConvertidas = []
         options.forEach(op => {
             opcionesConvertidas.push({ descripcion: op, elegida: false })
@@ -158,7 +152,7 @@ class PreguntaPage extends Component {
     }
 
     descripcionVacia() {
-        return this.state.descripcionPregunta == '' || this.state.descripcionPregunta == ' ' || this.state.descripcionPregunta == null
+        return this.state.descripcion == '' || this.state.descripcion == ' ' || this.state.descripcion == null
     }
 
     tipoNoSeleccionado() {
@@ -173,7 +167,7 @@ class PreguntaPage extends Component {
         if (!this.esSolidaria()) {
             return true
         } else {
-            return (this.state.puntos >= 1 && this.state.puntos <= this.state.puntajeUsuario && !this.puntosVacios())
+            return (this.state.puntos >= 1 && this.state.puntos <= this.state.usuario.puntaje && !this.puntosVacios())
         }
     }
 
@@ -185,7 +179,7 @@ class PreguntaPage extends Component {
         } else {
             const opcionCorrecta = this.state.opciones.find(op => op.elegida == true)
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
-            this.state.pregunta.descripcion = this.state.descripcionPregunta
+            this.state.pregunta.descripcion = this.state.descripcion
             this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
             this.state.pregunta.puntos = parseInt(this.state.puntos)
             await preguntaService.actualizarPregunta(this.state.pregunta)
@@ -202,7 +196,7 @@ class PreguntaPage extends Component {
         else {
             const opcionCorrecta = this.state.opciones.find(op => op.elegida == true)
             this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
-            this.state.pregunta.descripcion = this.state.descripcionPregunta
+            this.state.pregunta.descripcion = this.state.descripcion
             this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
             this.state.pregunta.puntos = parseInt(this.state.puntos)
             this.state.pregunta.autor = this.state.usuario
@@ -239,27 +233,28 @@ class PreguntaPage extends Component {
     }
 
     render() {
+        const { usuario, pregunta, nueva, descripcion, tipo, tipoLabel, opciones, puntos, nuevaOpcion, nuevaOpcionVacia, mensajeDeError } = this.state
         return (
             <div className="preguntaBody">
-                {this.state.nueva && <span className="autor">Autor: {this.state.autor}</span>}
-                {!this.state.nueva && <span className="autor">Autor: {this.state.pregunta.autor.nombre} {this.state.pregunta.autor.apellido}</span>}
+                {nueva && <span className="autor">Autor: {usuario.nombre + ' ' + usuario.apellido}</span>}
+                {!nueva && <span className="autor">Autor: {pregunta.autor.nombre} {pregunta.autor.apellido}</span>}
                 <section className="encabezado">
                     <div className="tituloPregunta">
-                        <InputText className="descripcionPregunta" value={this.state.descripcionPregunta} onChange={(e) => this.setState({ descripcionPregunta: e.target.value })} />
+                        <InputText className="descripcionPregunta" value={descripcion} onChange={(e) => this.setState({ descripcion: e.target.value })} />
                     </div>
                 </section>
 
                 <div className="tipoPregunta">
                     <h2>Tipo de Pregunta</h2>
                     <div className="dropdown">
-                        {this.state.nueva && <Dropdown value={this.state.tipo} options={this.selectItems} onChange={this.seleccionarTipo} placeholder="Opciones" />}
+                        {nueva && <Dropdown value={tipo} options={this.selectItems} onChange={this.seleccionarTipo} placeholder="Opciones" />}
                     </div>
-                    {!this.state.nueva && <div className="tipo"> {this.state.tipoLabel}</div>}
+                    {!nueva && <div className="tipo"> {tipoLabel}</div>}
                 </div>
 
                 <div>
                     <div className="opciones">
-                        <DataTable className="table" value={this.state.opciones} scrollable scrollHeight="300px" >
+                        <DataTable className="table" value={opciones} scrollable scrollHeight="300px" >
                             <Column field="descripcion" style={{ width: '80%' }} ></Column>
                             <Column body={this.seleccionarOpcion} style={{ width: '10%' }}></Column>
                             <Column body={this.borrarOpcion} style={{ width: '10%' }}></Column>
@@ -268,13 +263,13 @@ class PreguntaPage extends Component {
 
                     <div className="label">
                         <h5>Nueva opción</h5>
-                        {this.state.nuevaOpcionVacia && <div className="validacion-opciones">La nueva opcion no puede estar vacía</div>}
+                        {nuevaOpcionVacia && <div className="validacion-opciones">La nueva opcion no puede estar vacía</div>}
                         <div className="agregar">
                             <section className="agregarOpcion">
                                 <InputText className="agregarOpcion" onChange={(e) => this.setState({ nuevaOpcion: e.target.value })} ref={(el) => (this.opcion = el)} />
                             </section>
                             <section>
-                                <Button label="Agregar" className="p-button-rounded p-button-primary" onClick={() => this.agregarOpcion(this.state.nuevaOpcion)} />
+                                <Button label="Agregar" className="p-button-rounded p-button-primary" onClick={() => this.agregarOpcion(nuevaOpcion)} />
                             </section>
                         </div>
                     </div>
@@ -282,21 +277,21 @@ class PreguntaPage extends Component {
                     {this.esSolidaria() &&
                         <div className="puntos">
                             <div className="puntos-texto">Puntos:</div>
-                            <InputText value={this.state.puntos} onChange={(e) => this.setState({ puntos: e.target.value })} />
+                            <InputText value={puntos} onChange={(e) => this.setState({ puntos: e.target.value })} />
                         </div>}
 
                 </div>
 
                 <div className="buttonsdiv">
                     <div>
-                        {this.state.mensajeDeError && !this.puntosValidos() && <div className="validacion-opciones">Puntaje indicado es incorrecto</div>}
-                        {this.state.mensajeDeError && !this.soloUnaOpcionSeleccionada() && <span className="validacion-opciones">Debe seleccionar una opción</span>}
-                        {this.state.mensajeDeError && this.descripcionVacia() && <div className="validacion-opciones">El título de la pregunta no puede estar vacío</div>}
-                        {this.state.mensajeDeError && this.tipoNoSeleccionado() && <div className="validacion-opciones">Debe elegir el tipo de pregunta</div>}
+                        {mensajeDeError && !this.puntosValidos() && <div className="validacion-opciones">Puntaje indicado es incorrecto</div>}
+                        {mensajeDeError && !this.soloUnaOpcionSeleccionada() && <span className="validacion-opciones">Debe seleccionar una opción</span>}
+                        {mensajeDeError && this.descripcionVacia() && <div className="validacion-opciones">El título de la pregunta no puede estar vacío</div>}
+                        {mensajeDeError && this.tipoNoSeleccionado() && <div className="validacion-opciones">Debe elegir el tipo de pregunta</div>}
                     </div>
                     <div className="botones">
-                        {this.state.nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.crear()} />}
-                        {!this.state.nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.aceptar()} />}
+                        {nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.crear()} />}
+                        {!nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.aceptar()} />}
                         <Button label="Cancelar" className="p-button-rounded p-button-danger" onClick={() => this.cancelar()} />
                     </div>
                 </div>
