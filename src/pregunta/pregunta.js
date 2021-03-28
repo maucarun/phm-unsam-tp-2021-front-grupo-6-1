@@ -17,17 +17,17 @@ class PreguntaPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            usuario: new Usuario(),
             pregunta: new Pregunta(),
+            nueva: false,
             descripcion: '',
             opciones: [],
-            usuario: new Usuario(),
-            mensajeDeError: false,
-            nuevaOpcionVacia: false,
             nuevaOpcion: '',
-            nueva: false,
+            nuevaOpcionVacia: false,
             tipo: '',
             tipoLabel: '',
             puntos: 0,
+            mensajeDeError: false,
         };
 
         this.selectItems = [
@@ -52,7 +52,6 @@ class PreguntaPage extends Component {
                 this.setState({
                     pregunta,
                     descripcion: pregunta.descripcion,
-                    tipo: pregunta.type,
                     puntos: pregunta.puntos,
                 })
                 this.convertirOpciones()
@@ -72,8 +71,8 @@ class PreguntaPage extends Component {
     }
 
     mapearTipo() {
-        const tipo = this.state.tipo
-        const tipoLabel = (this.selectItems.find(t => t.value == tipo))
+        const tipo = this.state.pregunta.type
+        const tipoLabel = this.selectItems.find(t => t.value == tipo)
         return tipoLabel.label
     }
 
@@ -172,7 +171,7 @@ class PreguntaPage extends Component {
     }
 
     aceptar = async () => {
-        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia() || !this.puntosValidos()) {
+        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia() || !this.puntosValidos() || this.unaSolaOpcion()) {
             this.setState(
                 { mensajeDeError: true }
             )
@@ -188,7 +187,7 @@ class PreguntaPage extends Component {
     }
 
     crear = async () => {
-        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia() || this.tipoNoSeleccionado() || !this.puntosValidos()) {
+        if (!this.soloUnaOpcionSeleccionada() || this.descripcionVacia() || this.tipoNoSeleccionado() || !this.puntosValidos() || this.unaSolaOpcion()) {
             this.setState(
                 { mensajeDeError: true }
             )
@@ -228,6 +227,10 @@ class PreguntaPage extends Component {
         return opcionesSeleccionadas.length === 1
     }
 
+    unaSolaOpcion() {
+        return this.state.opciones.length == 1
+    }
+
     clearInput() {
         this.opcion.value = "";
     }
@@ -243,14 +246,16 @@ class PreguntaPage extends Component {
                         <InputText className="descripcionPregunta" value={descripcion} onChange={(e) => this.setState({ descripcion: e.target.value })} />
                     </div>
                 </section>
+                {mensajeDeError && this.descripcionVacia() && <div className="validacion">El título de la pregunta no puede estar vacío</div>}
 
                 <div className="tipoPregunta">
                     <h2>Tipo de Pregunta</h2>
-                    <div className="dropdown">
-                        {nueva && <Dropdown value={tipo} options={this.selectItems} onChange={this.seleccionarTipo} placeholder="Opciones" />}
-                    </div>
+                    {nueva && <div className="dropdown">
+                        <Dropdown value={tipo} options={this.selectItems} onChange={this.seleccionarTipo} placeholder="Opciones" />
+                    </div>}
                     {!nueva && <div className="tipo"> {tipoLabel}</div>}
                 </div>
+                {nueva && mensajeDeError && this.tipoNoSeleccionado() && <div className="validacion-tipo">Debe elegir el tipo de pregunta</div>}
 
                 <div>
                     <div className="opciones">
@@ -260,10 +265,11 @@ class PreguntaPage extends Component {
                             <Column body={this.borrarOpcion} style={{ width: '10%' }}></Column>
                         </DataTable>
                     </div>
+                    {mensajeDeError && this.unaSolaOpcion() && <div className="validacion">La pregunta no puede tener sólo una opción</div>}
+                    {mensajeDeError && !this.soloUnaOpcionSeleccionada() && <span className="validacion">Debe seleccionar una opción correcta</span>}
 
                     <div className="label">
                         <h5>Nueva opción</h5>
-                        {nuevaOpcionVacia && <div className="validacion-opciones">La nueva opcion no puede estar vacía</div>}
                         <div className="agregar">
                             <section className="agregarOpcion">
                                 <InputText className="agregarOpcion" onChange={(e) => this.setState({ nuevaOpcion: e.target.value })} ref={(el) => (this.opcion = el)} />
@@ -273,21 +279,19 @@ class PreguntaPage extends Component {
                             </section>
                         </div>
                     </div>
+                    {nuevaOpcionVacia && <div className="validacion">La nueva opcion no puede estar vacía</div>}
 
                     {this.esSolidaria() &&
                         <div className="puntos">
                             <div className="puntos-texto">Puntos:</div>
                             <InputText value={puntos} onChange={(e) => this.setState({ puntos: e.target.value })} />
+                            {mensajeDeError && !this.puntosValidos() && <div className="validacion">Puntaje indicado es incorrecto</div>}
                         </div>}
 
                 </div>
 
                 <div className="buttonsdiv">
                     <div>
-                        {mensajeDeError && !this.puntosValidos() && <div className="validacion-opciones">Puntaje indicado es incorrecto</div>}
-                        {mensajeDeError && !this.soloUnaOpcionSeleccionada() && <span className="validacion-opciones">Debe seleccionar una opción</span>}
-                        {mensajeDeError && this.descripcionVacia() && <div className="validacion-opciones">El título de la pregunta no puede estar vacío</div>}
-                        {mensajeDeError && this.tipoNoSeleccionado() && <div className="validacion-opciones">Debe elegir el tipo de pregunta</div>}
                     </div>
                     <div className="botones">
                         {nueva && <Button label="Aceptar" className="p-button-rounded p-button-success" onClick={() => this.crear()} />}

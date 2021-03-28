@@ -89,3 +89,15 @@
   margin-top: 2em;
   margin-right: 2%;
 }
+
+.validacion,
+.validacion-tipo {
+  color: #ff9999;
+  font-weight: bold;
+  margin-left: 55px;
+}
+
+.validacion-tipo {
+  text-align: right;
+  margin-right: 55px;
+}
