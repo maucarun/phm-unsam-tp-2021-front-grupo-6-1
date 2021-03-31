@@ -20,12 +20,13 @@ class PreguntaService {
     }
 
     async actualizarPregunta(pregunta) {
-        return await axios.put(`${REST_SERVER_URL}/pregunta/${pregunta.id}`, pregunta.toJSON())
+        const data = { type: pregunta.type, respuestaCorrecta: pregunta.respuestaCorrecta, 
+                        descripcion: pregunta.descripcion, opciones: pregunta.opciones }
+        return await axios.put(`${REST_SERVER_URL}/pregunta/${pregunta.id}`, data)
     }
 
     async nuevaPregunta(pregunta) {
         await axios.post(`${REST_SERVER_URL}/pregunta`, pregunta.toJSON())
     }
-
 }
 export const preguntaService = new PreguntaService()
