@@ -1,6 +1,7 @@
 import Pregunta from '../dominio/pregunta'
 import axios from 'axios'
 import { REST_SERVER_URL } from './constants'
+import { usuarioService } from "../services/usuario-service";
 
 class PreguntaService {
 
@@ -26,7 +27,11 @@ class PreguntaService {
     }
 
     async nuevaPregunta(pregunta) {
-        await axios.post(`${REST_SERVER_URL}/pregunta`, pregunta.toJSON())
+        const data = { type: pregunta.type, respuestaCorrecta: pregunta.respuestaCorrecta, 
+            descripcion: pregunta.descripcion, opciones: pregunta.opciones,
+            puntos: pregunta.puntos, fechaHoraCreacion: pregunta.fechaHoraCreacion }
+            console.log(data)
+        await axios.post(`${REST_SERVER_URL}/${usuarioService.userLogged.id}/pregunta`, data)
     }
 }
 export const preguntaService = new PreguntaService()
