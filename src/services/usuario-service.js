@@ -5,16 +5,6 @@ import { REST_SERVER_URL } from './constants'
 class UsuarioService {
     userLogged
 
-    /* async allInstances() {
-        const { data } = await axios.get(`${REST_SERVER_URL}/usuarios`)
-        return data.map(usuario => Usuario.fromJson(usuario))
-    }
-
-    async getContactos(valorBusqueda) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/usuarios/${valorBusqueda}`)
-        return data.map(usuario => Usuario.fromJson(usuario))
-    } */
-
     async loguearUsuario(jsonDataLogin) {
         const { data } = await axios.post(`${REST_SERVER_URL}/login`, jsonDataLogin)
         return Usuario.fromJson(data)
@@ -38,13 +28,12 @@ class UsuarioService {
     async agregarAmigo(nuevoAmigo) {
         const id = this.userLogged.id
         const { data } = await axios.put(`${REST_SERVER_URL}/usuarios/${id}/agregarAmigo/${nuevoAmigo.id}`)
-        return Usuario.fromJson(data) 
+        return Usuario.fromJson(data)
     }
 
     async modificarUsuario(usuario) {
         return await axios.put(`${REST_SERVER_URL}/perfilDeUsuario/${usuario.id}`, usuario.toJSON())
     }
 
-    
 }
 export const usuarioService = new UsuarioService()
