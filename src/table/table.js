@@ -35,7 +35,7 @@ const Table = ({ history, match }) => {
             setApellidoAutor(preg.autor.apellido)
             convertirOpciones(preg.opciones)
         } catch (error) {
-            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar la pregunta', detail: error.message, life: 3000 })
+            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar la pregunta', detail: error.message, life: 5000 })
         }
     }
 
@@ -88,9 +88,7 @@ const Table = ({ history, match }) => {
                 setDisplaySuccess(true)
             }
         } catch (error) {
-            console.log("No se trajo la pregunta")
-            console.log(_pregunta)
-            console.log(_pregunta.respuestaCorrecta)
+            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al intentar buscar la pregunta', detail: error.message, life: 5000 })
         }
     }
 
@@ -100,7 +98,7 @@ const Table = ({ history, match }) => {
             await usuarioService.actualizarUsuario(usuarioService.userLogged.id, pregunta.id, opcionJson)
             usuarioService.userLogged = await usuarioService.getUsuario(usuarioService.userLogged.id)
         } catch (error) {
-            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al actualizar sus datos', detail: error.message, life: 3000 })
+            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al actualizar sus datos', detail: error.message, life: 5000 })
         }
     }
 

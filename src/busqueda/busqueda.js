@@ -26,7 +26,7 @@ const Busqueda = ({history}) => {
             const instances = await preguntaService.allInstances(activa, usuarioService.userLogged.id)
             setPreguntas(instances)
         } catch(error) {
-            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 3000})
+            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
         }
     }
 
@@ -45,7 +45,7 @@ const Busqueda = ({history}) => {
                 const data = await preguntaService.getPreguntas(valor, soloActivas, usuarioService.userLogged.id)
                 setPreguntas(data)
             } catch {
-                toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 3000})
+                toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
             }
         } else {
             await allInstances(soloActivas)
