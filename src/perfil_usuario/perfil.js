@@ -21,17 +21,14 @@ class Perfil extends Component {
       mostrarModal: false,
       noAmigos:[],
       noAmigoSeleccionado: null,
-      fechaDeNac: ""
     };
   }
 
-
   async componentDidMount() {
     try {
-      const usuario = await usuarioService.getUsuario(
-        usuarioService.userLogged.id,
-        );
-        this.cambiarEstado(usuario);
+      const usuario = await usuarioService.getUsuario(usuarioService.userLogged.id);
+      console.dir(usuario)
+      this.cambiarEstado(usuario);
       } catch (e) {
         //this.addMessages(e)
       }
@@ -46,7 +43,6 @@ class Perfil extends Component {
   cambiarEstado(usuario) {
     this.setState({
       usuario: usuario,
-      fechaDeNac: usuario.fechaDeNacimiento.toString(),
     });
   }
 
@@ -90,9 +86,10 @@ class Perfil extends Component {
 
   agregarAmigo = async () => {
      try {
-       const usuarioLogueado = await usuarioService.agregarAmigo(this.state.noAmigoSeleccionado)
+       await usuarioService.agregarAmigo(this.state.noAmigoSeleccionado)
+       const usuarioLogueado = await usuarioService.getUsuario(usuarioService.userLogged.id)
        this.setState({mostrarModal: false, usuario: usuarioLogueado})
-       this.toast.current.show({ severity: 'success', summary: "Bien" , detail: "Has Agregado un nuevo amigo", life: 3000})
+       this.toast.current.show({ severity: 'success', summary: "Bien" , detail: "Has agregado un nuevo amigo", life: 3000})
      }catch(e) {
        //this.addMessages(e)
      }
@@ -101,7 +98,8 @@ class Perfil extends Component {
    guardarCambios = async () => {
      try {
        this.state.usuario.validar()
-       const usuario = await usuarioService.modificarUsuario(this.state.usuario)
+       await usuarioService.modificarUsuario(this.state.usuario)
+       this.toast.current.show({ severity: 'success', summary: "Bien" , detail: "Has realizado cambios", life: 3000})
      }catch(e) {
       this.toast.current.show({ severity: 'error', summary: "Error" , detail: e.message, life: 3000})
      }
@@ -109,11 +107,6 @@ class Perfil extends Component {
 
   cancelar() {
     this.props.history.push('/busqueda')
-  }
-
-  convertirADate() {
-    var parts = this.state.fechaDeNac.split('-')
-    return new Date(parts[0],parts[1]-1,parts[2])
   }
 
   render() {
@@ -141,7 +134,7 @@ class Perfil extends Component {
         <section className="inputs1">
           <h5>Nacimiento</h5>
           <Calendar
-            value={this.convertirADate()}
+            value={this.state.usuario.fechaDeNacimiento}
             onChange={(event) => this.setFechaDeNacimiento(event.value)}
             showIcon
           ></Calendar>
