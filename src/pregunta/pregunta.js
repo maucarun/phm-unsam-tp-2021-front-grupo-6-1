@@ -67,7 +67,7 @@ class PreguntaPage extends Component {
     }
 
     esSolidaria() {
-        return this.state.tipo == 'solidaria'
+        return this.state.tipo == 'solidaria' || this.state.pregunta.type == 'solidaria'
     }
 
     mapearTipo() {
@@ -184,7 +184,7 @@ class PreguntaPage extends Component {
                 opciones: this.desconvertirOpciones(this.state.opciones),
                 type: this.state.pregunta.type
             }
-            if (this.state.tipo == 'solidaria') {
+            if (this.state.pregunta.type == 'solidaria') {
                 pregunta.puntos = parseInt(this.state.puntos)
             }
             await preguntaService.actualizarPregunta(pregunta)
