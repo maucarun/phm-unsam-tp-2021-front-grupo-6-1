@@ -12,7 +12,7 @@ class UsuarioService {
 
     async getUsuario(id) {
         const { data } = await axios.get(`${REST_SERVER_URL}/perfilDeUsuario/${id}`)
-        return Usuario.fromJson(data)
+        return Usuario.fromJsonPerfil(data)
     }
 
     async actualizarUsuario(userId, preguntaId, opcionJson) {
@@ -28,7 +28,7 @@ class UsuarioService {
     async agregarAmigo(nuevoAmigo) {
         const id = this.userLogged.id
         const { data } = await axios.put(`${REST_SERVER_URL}/usuarios/${id}/agregarAmigo/${nuevoAmigo.id}`)
-        return Usuario.fromJson(data)
+        return Usuario.fromJsonPerfil(data)
     }
 
     async modificarUsuario(usuario) {
