@@ -1,0 +1,59 @@
+.busqueda {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    height: 7rem;
+    justify-content: space-evenly;
+    margin-left: 20%;
+    margin-top: 1em;
+}
+
+.title {
+    display: flex;
+    height: 2em;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-shadow: -2px -2px 1px #000;
+}
+
+.body {
+    display: flex;
+    height: 2.5rem;
+}
+
+.inputtext {
+    width: 70%;
+}
+
+#button {
+    width: 5%;
+}
+
+.chckbx-desc {
+    margin-top: 0.5em;
+}
+
+.chckbx-span {
+    margin-left: 0.5em;
+    font-weight: bold;
+    text-shadow: -1px -1px 0.5px #000;
+    color: white;
+}
+
+#button-column {
+    height: 1.6em;
+    min-width: 7em;
+    margin-left: 12em;
+}
+
+.data-table {
+    margin: 2% 20%;
+    width: 60%;
+}
+
+.button-bottom {
+    display: flex;
+    justify-content: flex-end;
+    width: 80%;
+}

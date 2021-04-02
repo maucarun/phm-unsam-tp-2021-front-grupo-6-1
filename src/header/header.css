@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #006064;
+    color: white;
+    text-shadow: -2px -2px 1px #000;
+}
+
+#toolbar {
+    display: flex;
+    background-color: #006064;
+    border: #006064;
+}
+
+#btn {
+    margin: 0.2em;
+}
+
+.title-header {
+    font-weight: bold;
+    margin-left: 15%;
+}

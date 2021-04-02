@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(163 226 236);
+  /* background-image: url("https://media.gettyimages.com/vectors/seamless-question-mark-background-vector-id950169146?s=612x612"); */
+  background-image: url("https://previews.123rf.com/images/nataliagesto/nataliagesto1204/nataliagesto120400402/13252515-signo-de-interrogaci%C3%B3n-s%C3%ADmbolo-signo-nube-tel%C3%B3n-de-fondo.jpg");
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

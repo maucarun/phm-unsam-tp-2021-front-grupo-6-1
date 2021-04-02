@@ -1,0 +1,108 @@
+.preguntaBody {
+  width: 50rem;
+  margin: 2rem auto;
+  background-color: white;
+  height: 90%;
+  margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .encabezado {
+  height: 5rem;
+  background-color: turquoise;
+  display: flex;
+  justify-content: space-between;
+} */
+
+.tituloPregunta {
+  margin-left: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.descripcionPregunta {
+  font-size: 26px !important;
+  width: 90%;
+  background-color: turquoise !important;
+  font-weight: bold !important;
+  color: black !important;
+  border: 2px white solid !important;
+}
+
+.dropdown .p-dropdown {
+  width: 14rem;
+}
+
+.tipo {
+  font-size: 20px;
+  margin-right: 140px;
+}
+
+.tipoPregunta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 55px 0 55px;
+}
+
+.opciones {
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  width: 90%;
+}
+
+.label {
+  margin-left: 55px;
+}
+
+.agregar {
+  display: flex;
+  margin-right: 55px;
+}
+
+.agregarOpcion {
+  width: 95%;
+}
+
+.puntos {
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.puntos-texto {
+  display: flex;
+  align-items: center;
+  padding-right: 5px;
+  font-weight: bold;
+}
+
+.botones {
+  display: flex;
+  width: 30%;
+  justify-content: space-evenly;
+  margin-top: 2em;
+  margin-right: 2%;
+}
+
+.validacion,
+.validacion-tipo,
+.validacion-puntos {
+  color: #ff9999;
+  font-weight: bold;
+  margin-left: 55px;
+}
+
+.validacion-tipo {
+  text-align: right;
+  margin-right: 55px;
+}
+
+.validacion-puntos {
+  text-align: center;
+}
