@@ -177,11 +177,17 @@ class PreguntaPage extends Component {
             )
         } else {
             const opcionCorrecta = this.state.opciones.find(op => op.elegida == true)
-            this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
-            this.state.pregunta.descripcion = this.state.descripcion
-            this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
-            this.state.pregunta.puntos = parseInt(this.state.puntos)
-            await preguntaService.actualizarPregunta(this.state.pregunta)
+            const pregunta = {
+                id: this.state.pregunta.id,
+                respuestaCorrecta: opcionCorrecta.descripcion,
+                descripcion: this.state.descripcion,
+                opciones: this.desconvertirOpciones(this.state.opciones),
+                type: this.state.pregunta.type
+            }
+            if (this.state.tipo == 'solidaria') {
+                pregunta.puntos = parseInt(this.state.puntos)
+            }
+            await preguntaService.actualizarPregunta(pregunta)
             this.props.history.push("/busqueda")
         }
     }
@@ -194,14 +200,17 @@ class PreguntaPage extends Component {
         }
         else {
             const opcionCorrecta = this.state.opciones.find(op => op.elegida == true)
-            this.state.pregunta.respuestaCorrecta = opcionCorrecta.descripcion
-            this.state.pregunta.descripcion = this.state.descripcion
-            this.state.pregunta.opciones = this.desconvertirOpciones(this.state.opciones)
-            this.state.pregunta.puntos = parseInt(this.state.puntos)
-            this.state.pregunta.autor = this.state.usuario
-            this.state.pregunta.type = this.state.tipo
-            this.state.pregunta.fechaHoraCreacion = this.horaActual()
-            await preguntaService.nuevaPregunta(this.state.pregunta)
+            const pregunta = {
+                type: this.state.tipo,
+                respuestaCorrecta: opcionCorrecta.descripcion,
+                descripcion: this.state.descripcion,
+                opciones: this.desconvertirOpciones(this.state.opciones),
+                fechaHoraCreacion: this.horaActual()
+            }
+            if (this.state.tipo == 'solidaria') {
+                pregunta.puntos = parseInt(this.state.puntos)
+            }
+            await preguntaService.nuevaPregunta(pregunta)
             this.props.history.push("/busqueda")
         }
     }
