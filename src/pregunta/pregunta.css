@@ -91,7 +91,8 @@
 }
 
 .validacion,
-.validacion-tipo {
+.validacion-tipo,
+.validacion-puntos {
   color: #ff9999;
   font-weight: bold;
   margin-left: 55px;
@@ -100,4 +101,8 @@
 .validacion-tipo {
   text-align: right;
   margin-right: 55px;
+}
+
+.validacion-puntos {
+  text-align: center;
 }
