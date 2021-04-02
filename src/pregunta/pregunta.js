@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import "./pregunta.css";
 import { InputText } from "primereact/inputtext";
 import Pregunta from "../dominio/pregunta";
@@ -10,9 +10,12 @@ import { Column } from "primereact/column";
 import { usuarioService } from "../services/usuario-service";
 import { Dropdown } from 'primereact/dropdown';
 import { Checkbox } from 'primereact/checkbox';
+import { Toast } from 'primereact/toast';
 import '../table/table.css'
 
 class PreguntaPage extends Component {
+
+    toast = createRef()
 
     constructor(props) {
         super(props);
@@ -57,8 +60,8 @@ class PreguntaPage extends Component {
                 this.convertirOpciones()
                 this.setState({ tipoLabel: this.mapearTipo() })
             }
-        } catch (e) {
-            //console.log("fallo")
+        } catch (error) {
+            this.toast.current.show({ severity: 'error', summary: 'Ocurrió un error al cargar la pregunta', detail: error.message, life: 3000 })
         }
     }
 
@@ -187,8 +190,12 @@ class PreguntaPage extends Component {
             if (this.state.pregunta.type == 'solidaria') {
                 pregunta.puntos = parseInt(this.state.puntos)
             }
-            await preguntaService.actualizarPregunta(pregunta)
-            this.props.history.push("/busqueda")
+            try {
+                await preguntaService.actualizarPregunta(pregunta)
+                this.props.history.push("/busqueda")
+            } catch (error) {
+                this.toast.current.show({ severity: 'error', summary: 'Ocurrió un error al editar la pregunta', detail: error.message, life: 3000 })
+            }
         }
     }
 
@@ -210,8 +217,12 @@ class PreguntaPage extends Component {
             if (this.state.tipo == 'solidaria') {
                 pregunta.puntos = parseInt(this.state.puntos)
             }
-            await preguntaService.nuevaPregunta(pregunta)
-            this.props.history.push("/busqueda")
+            try {
+                await preguntaService.nuevaPregunta(pregunta)
+                this.props.history.push("/busqueda")
+            } catch (error) {
+                this.toast.current.show({ severity: 'error', summary: 'Ocurrió un error al crear la pregunta', detail: error.message, life: 3000 })
+            }
         }
     }
 
@@ -308,7 +319,7 @@ class PreguntaPage extends Component {
                         <Button label="Cancelar" className="p-button-rounded p-button-danger" onClick={() => this.cancelar()} />
                     </div>
                 </div>
-
+                <Toast ref={this.toast} />
             </div>
 
         );
