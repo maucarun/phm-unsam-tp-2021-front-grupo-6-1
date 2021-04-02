@@ -98,7 +98,7 @@ const Table = ({history, match}) => {
         const opcionJson = { "opcionElegida": opcionElegida,  "pregunta": pregunta.descripcion}
         try {
             await usuarioService.actualizarUsuario(usuarioService.userLogged.id, pregunta.id, opcionJson)
-            usuarioService.userLogged = await usuarioService.getUsuario(usuarioService.userLogged.id)
+            //usuarioService.userLogged = await usuarioService.getUsuario(usuarioService.userLogged.id)
         } catch(error) {
             toast.current.show({ severity: 'error', summary: 'Ocurrió un error al actualizar sus datos', detail: error.message, life: 3000})
         }
