@@ -285,8 +285,8 @@ class PreguntaPage extends Component {
                         <div className="puntos">
                             <div className="puntos-texto">Puntos:</div>
                             <InputText value={puntos} onChange={(e) => this.setState({ puntos: e.target.value })} />
-                            {mensajeDeError && !this.puntosValidos() && <div className="validacion">Puntaje indicado es incorrecto</div>}
                         </div>}
+                    {mensajeDeError && !this.puntosValidos() && <div className="validacion-puntos">Puntaje indicado es incorrecto</div>}
 
                 </div>
 
