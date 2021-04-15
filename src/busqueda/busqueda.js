@@ -1,4 +1,4 @@
-import React, {useState, useEffect, createRef} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import {Checkbox} from 'primereact/checkbox';
@@ -11,7 +11,7 @@ import { Toast } from 'primereact/toast';
 
 const Busqueda = ({history}) => {
 
-    const toast = createRef()
+    const toast = useRef(null)
     const encabezadoDeTabla = "Resultado de busqueda"
     const [valorBusqueda, setValorBusqueda] = useState("")
     const [soloActivas, setSoloActivas] = useState(false)
@@ -44,7 +44,7 @@ const Busqueda = ({history}) => {
             try {
                 const data = await preguntaService.getPreguntas(valor, soloActivas, usuarioService.userLogged.id)
                 setPreguntas(data)
-            } catch {
+            } catch(error) {
                 toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
             }
         } else {

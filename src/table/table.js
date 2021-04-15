@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Checkbox } from 'primereact/checkbox';
@@ -17,7 +17,7 @@ const Table = ({ history, match }) => {
         await buscarPregunta()
     }, [])
 
-    const toast = createRef()
+    const toast = useRef(null)
     const [pregunta, setPregunta] = useState(new Pregunta())
     const [opciones, setOpciones] = useState([])
     const [mensajeDeError, setMensajeDeError] = useState(false)

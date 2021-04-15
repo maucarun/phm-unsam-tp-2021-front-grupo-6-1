@@ -1,4 +1,4 @@
-import { Component, createRef } from "react";
+import { Component, useRef } from "react";
 import "./perfil.css";
 import { InputText } from "primereact/inputtext";
 import Usuario from "../dominio/usuario";
@@ -12,7 +12,7 @@ import { Toast } from 'primereact/toast';
 
 class Perfil extends Component {
   
-  toast = createRef()
+  toast = useRef(null)
   
   constructor(props) {
     super(props);

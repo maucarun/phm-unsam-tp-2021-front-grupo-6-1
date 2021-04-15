@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component, useRef } from "react";
 import "./pregunta.css";
 import { InputText } from "primereact/inputtext";
 import Pregunta from "../dominio/pregunta";
@@ -15,7 +15,7 @@ import '../table/table.css'
 
 class PreguntaPage extends Component {
 
-    toast = createRef()
+    toast = useRef(null)
 
     constructor(props) {
         super(props);
