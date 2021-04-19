@@ -22,7 +22,6 @@ const Table = ({ history, match }) => {
     const [opciones, setOpciones] = useState([])
     const [mensajeDeError, setMensajeDeError] = useState(false)
     const [nombreAutor, setNombreAutor] = useState("")
-    const [apellidoAutor, setApellidoAutor] = useState("")
     const [displaySuccess, setDisplaySuccess] = useState(false)
     const [displayIncorrect, setDisplayIncorrect] = useState(false)
     const [displayInactive, setDisplayInactive] = useState(false)
@@ -31,8 +30,7 @@ const Table = ({ history, match }) => {
         try {
             const preg = await preguntaService.getPregunta(match.params.id)
             setPregunta(preg)
-            setNombreAutor(preg.autor.nombre)
-            setApellidoAutor(preg.autor.apellido)
+            setNombreAutor(preg.autor)
             convertirOpciones(preg.opciones)
         } catch (error) {
             toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar la pregunta', detail: error.message, life: 5000 })
@@ -73,19 +71,19 @@ const Table = ({ history, match }) => {
     }
 
     const rejectFunc = () => {
-
+        console.log(pregunta)
     }
 
     const acceptFunc = async (opcionElegida) => {
-        await actualizarUser(opcionElegida)
         try {
             const _pregunta = await preguntaService.getPregunta(match.params.id)
-            if (opcionElegida !== _pregunta.respuestaCorrecta) {
-                setDisplayIncorrect(true)
-            } else if (!_pregunta.activa) {
+            const correcta = await actualizarUser(opcionElegida)
+            if (!_pregunta.activa) {
                 setDisplayInactive(true)
-            } else {
+            } else if (correcta) {
                 setDisplaySuccess(true)
+            } else {
+                setDisplayIncorrect(true)
             }
         } catch (error) {
             toast.current.show({ severity: 'error', summary: 'Ocurrió un error al intentar buscar la pregunta', detail: error.message, life: 5000 })
@@ -95,8 +93,9 @@ const Table = ({ history, match }) => {
     const actualizarUser = async (opcionElegida) => {
         const opcionJson = { "opcionElegida": opcionElegida, "pregunta": pregunta.descripcion }
         try {
-            await usuarioService.actualizarUsuario(usuarioService.userLogged.id, pregunta.id, opcionJson)
+            const correcta = await usuarioService.actualizarUsuario(usuarioService.userLogged.id, pregunta.id, opcionJson)
             usuarioService.userLogged = await usuarioService.getUsuario(usuarioService.userLogged.id)
+            return correcta
         } catch (error) {
             toast.current.show({ severity: 'error', summary: 'Ocurrió un error al actualizar sus datos', detail: error.message, life: 5000 })
         }
@@ -148,7 +147,7 @@ const Table = ({ history, match }) => {
     return (
         <div className="container-table">
             <div className="table-and-span">
-                <span className="autor">Autor: {nombreAutor} {apellidoAutor}</span>
+                <span className="autor">Autor: {nombreAutor}</span>
                 <DataTable value={opciones} autoLayout={true}>
                     <Column className="descripcion" field="descripcion" header={pregunta.descripcion}></Column>
                     <Column className="" body={seleccionar}></Column>
@@ -169,8 +168,7 @@ const Table = ({ history, match }) => {
                 <span className="congratulations">Puntos totales: {usuarioService.userLogged.puntaje}</span>
             </Dialog>
             <Dialog header="Incorrecto" visible={displayInactive} style={{ width: '50vw' }} onHide={() => cerrarPantallaInactiva()}>
-                <span className="no-active">Su respuesta es correcta</span><br />
-                <span className="no-active">pero la pregunta respondida esta inactiva</span><br />
+                <span className="no-active">La pregunta respondida esta inactiva</span><br />
                 <span className="no-active">No ha sumado puntos</span><br />
                 <span className="no-active">Puntos totales: {usuarioService.userLogged.puntaje}</span>
             </Dialog>

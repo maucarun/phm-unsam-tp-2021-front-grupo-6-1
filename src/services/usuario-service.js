@@ -16,7 +16,8 @@ class UsuarioService {
     }
 
     async actualizarUsuario(userId, preguntaId, opcionJson) {
-        return await axios.put(`${REST_SERVER_URL}/perfilDeUsuario/${userId}/${preguntaId}`, opcionJson)
+        const { data } =  await axios.put(`${REST_SERVER_URL}/perfilDeUsuario/${userId}/pregunta/${preguntaId}`, opcionJson)
+        return data
     }
 
     async getNoAmigos() {
