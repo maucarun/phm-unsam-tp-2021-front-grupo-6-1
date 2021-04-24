@@ -22,6 +22,7 @@ const Table = ({ history, match }) => {
     const [opciones, setOpciones] = useState([])
     const [mensajeDeError, setMensajeDeError] = useState(false)
     const [nombreAutor, setNombreAutor] = useState("")
+    const [apellidoAutor, setApellidoAutor] = useState("")
     const [displaySuccess, setDisplaySuccess] = useState(false)
     const [displayIncorrect, setDisplayIncorrect] = useState(false)
     const [displayInactive, setDisplayInactive] = useState(false)
@@ -30,7 +31,8 @@ const Table = ({ history, match }) => {
         try {
             const preg = await preguntaService.getPregunta(match.params.id)
             setPregunta(preg)
-            setNombreAutor(preg.autor)
+            setNombreAutor(preg.autor.nombre)
+            setApellidoAutor(preg.autor.apellido)
             convertirOpciones(preg.opciones)
         } catch (error) {
             toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar la pregunta', detail: error.message, life: 5000 })
@@ -147,7 +149,7 @@ const Table = ({ history, match }) => {
     return (
         <div className="container-table">
             <div className="table-and-span">
-                <span className="autor">Autor: {nombreAutor}</span>
+                <span className="autor">Autor: {nombreAutor} {apellidoAutor}</span>
                 <DataTable value={opciones} autoLayout={true}>
                     <Column className="descripcion" field="descripcion" header={pregunta.descripcion}></Column>
                     <Column className="" body={seleccionar}></Column>

@@ -10,6 +10,11 @@ class PreguntaService {
         return Pregunta.fromJson(data)
     }
 
+    async getPreguntaEdicion(id) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntaEdicion/${id}`)
+        return Pregunta.fromJson(data)
+    }
+
     async getPreguntas(valorBusqueda, soloActivas, userId) {
         const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/${valorBusqueda}/${soloActivas}/${userId}`)
         return data.map(pregunta => Pregunta.fromJson(pregunta))
