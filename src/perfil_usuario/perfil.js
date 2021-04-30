@@ -27,7 +27,7 @@ class Perfil extends Component {
   async componentDidMount() {
     try {
       const usuario = await usuarioService.getUsuario(usuarioService.userLogged.id);
-      console.dir(usuario)
+      //console.dir(usuario)
       this.cambiarEstado(usuario);
       } catch (e) {
         //this.addMessages(e)

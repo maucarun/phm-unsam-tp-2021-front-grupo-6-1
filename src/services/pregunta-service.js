@@ -6,12 +6,12 @@ import { usuarioService } from "../services/usuario-service";
 class PreguntaService {
 
     async getPregunta(id) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/pregunta/${id}`)
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/${id}`)
         return Pregunta.fromJson(data)
     }
 
     async getPreguntaEdicion(id) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/preguntaEdicion/${id}`)
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/edicion/${id}`)
         return Pregunta.fromJson(data)
     }
 
@@ -36,11 +36,11 @@ class PreguntaService {
     }
 
     async actualizarPregunta(pregunta) {
-        return await axios.put(`${REST_SERVER_URL}/pregunta/${pregunta.id}`, pregunta)
+        return await axios.put(`${REST_SERVER_URL}/preguntas/${pregunta.id}`, pregunta)
     }
 
     async nuevaPregunta(pregunta) {
-        await axios.post(`${REST_SERVER_URL}/${usuarioService.userLogged.id}/pregunta`, pregunta)
+        await axios.post(`${REST_SERVER_URL}/preguntas/${usuarioService.userLogged.id}`, pregunta)
     }
 }
 export const preguntaService = new PreguntaService()
