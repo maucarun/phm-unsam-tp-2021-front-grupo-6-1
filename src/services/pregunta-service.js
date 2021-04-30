@@ -15,13 +15,23 @@ class PreguntaService {
         return Pregunta.fromJson(data)
     }
 
-    async getPreguntas(valorBusqueda, soloActivas, userId) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/${valorBusqueda}/${soloActivas}/${userId}`)
+    async getPreguntasActivasPorString(valorBusqueda, idUser) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/activas/${valorBusqueda}/noRespondidasPorUsuario/${idUser}`)
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
-    async allInstances(soloActivas, userId) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/preguntasAll/${soloActivas}/${userId}`)
+    async getPreguntasPorString(valorBusqueda, idUser) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/all/${valorBusqueda}/noRespondidasPorUsuario/${idUser}`)
+        return data.map(pregunta => Pregunta.fromJson(pregunta))
+    }
+
+    async allInstancesActivas(idUser) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/activas/noRespondidasPorUsuario/${idUser}`)
+        return data.map(pregunta => Pregunta.fromJson(pregunta))
+    }
+
+    async allInstances(idUser) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/all/noRespondidasPorUsuario/${idUser}`)
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
