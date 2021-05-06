@@ -1,4 +1,4 @@
-import React, {useState, useEffect, createRef} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import {Checkbox} from 'primereact/checkbox';
@@ -11,7 +11,7 @@ import { Toast } from 'primereact/toast';
 
 const Busqueda = ({history}) => {
 
-    const toast = createRef()
+    const toast = useRef(null)
     const encabezadoDeTabla = "Resultado de busqueda"
     const [valorBusqueda, setValorBusqueda] = useState("")
     const [soloActivas, setSoloActivas] = useState(false)
@@ -21,41 +21,52 @@ const Busqueda = ({history}) => {
         await buscar(valorBusqueda)
     }, [soloActivas])
 
-    const allInstances = async(activa) => {
-        try {
-            const instances = await preguntaService.allInstances(activa, usuarioService.userLogged.id)
-            setPreguntas(instances)
-        } catch(error) {
-            toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
-        }
-    }
-
+    
     const seleccionarButton = (preguntaCell) => {
         return(
             preguntaCell.autor.userName === usuarioService.userLogged.userName ?
             <Button className="p-button-rounded p-button-Primary" id="button-column" label="Editar" onClick={() => navegarAEdicion(preguntaCell.id)}/>
             :
             <Button className="p-button-rounded p-button-Primary" id="button-column" label="Responder" onClick={() => navegarAResponder(preguntaCell.id)}/>
-        )
-    }
-
-    const buscar = async(valor) => {
-        if(valor !== "") {
-            try {
-                const data = await preguntaService.getPreguntas(valor, soloActivas, usuarioService.userLogged.id)
-                setPreguntas(data)
-            } catch {
-                toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
-            }
-        } else {
-            await allInstances(soloActivas)
+            )
         }
-    }
-
-    const alCambiarValorDeBusqueda = async (event) => {
-        setValorBusqueda(event.target.value)
-        await buscar(event.target.value)
-    }
+        
+        const buscar = async(valor) => {
+            if(valor !== "" && soloActivas) {
+                try {
+                    const data = await preguntaService.getPreguntasActivasPorString(valor, usuarioService.userLogged.id)
+                    setPreguntas(data)
+                } catch(error) {
+                    toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
+                }
+            } else if(valor !== "" && soloActivas == false){
+                try {
+                    const data = await preguntaService.getPreguntasPorString(valor, usuarioService.userLogged.id)
+                    setPreguntas(data)
+                } catch(error) {
+                    toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
+                }
+            } else if (soloActivas){
+                try {
+                    const instances = await preguntaService.allInstancesActivas(usuarioService.userLogged.id)
+                    setPreguntas(instances)
+                } catch(error) {
+                    toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
+                }
+            } else {
+                try {
+                    const instances = await preguntaService.allInstances(usuarioService.userLogged.id)
+                    setPreguntas(instances)
+                } catch(error) {
+                    toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar las preguntas', detail: error.message, life: 7000})
+                }
+            }
+        }
+        
+        const alCambiarValorDeBusqueda = async (event) => {
+            setValorBusqueda(event.target.value)
+            await buscar(event.target.value)
+        }
 
     const navegarAEdicion = (id) => {
         history.push(`/pregunta/${id}`)

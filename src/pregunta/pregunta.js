@@ -51,7 +51,7 @@ class PreguntaPage extends Component {
                 this.setState({ nueva: true })
             }
             else {
-                const pregunta = await preguntaService.getPregunta(idPregunta)
+                const pregunta = await preguntaService.getPreguntaEdicion(idPregunta)
                 this.setState({
                     pregunta,
                     descripcion: pregunta.descripcion,

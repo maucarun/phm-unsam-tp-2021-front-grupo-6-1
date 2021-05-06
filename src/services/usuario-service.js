@@ -6,33 +6,34 @@ class UsuarioService {
     userLogged
 
     async loguearUsuario(jsonDataLogin) {
-        const { data } = await axios.post(`${REST_SERVER_URL}/login`, jsonDataLogin)
+        const { data } = await axios.post(`${REST_SERVER_URL}/usuario/login`, jsonDataLogin)
         return Usuario.fromJson(data)
     }
 
     async getUsuario(id) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/perfilDeUsuario/${id}`)
+        const { data } = await axios.get(`${REST_SERVER_URL}/usuario/${id}`)
         return Usuario.fromJsonPerfil(data)
     }
 
     async actualizarUsuario(userId, preguntaId, opcionJson) {
-        return await axios.put(`${REST_SERVER_URL}/perfilDeUsuario/${userId}/${preguntaId}`, opcionJson)
+        const { data } =  await axios.put(`${REST_SERVER_URL}/usuario/${userId}/pregunta/${preguntaId}`, opcionJson)
+        return data
     }
 
     async getNoAmigos() {
         const id = this.userLogged.id
-        const { data } = await axios.get(`${REST_SERVER_URL}/usuarios/noAmigos/${id}`)
+        const { data } = await axios.get(`${REST_SERVER_URL}/usuario/${id}/noAmigos`)
         return data.map(noAmigo => Usuario.fromJson(noAmigo))
     }
 
     async agregarAmigo(nuevoAmigo) {
         const id = this.userLogged.id
-        const { data } = await axios.put(`${REST_SERVER_URL}/usuarios/${id}/agregarAmigo/${nuevoAmigo.id}`)
+        const { data } = await axios.put(`${REST_SERVER_URL}/usuario/${id}/agregarAmigo/${nuevoAmigo.id}`)
         return Usuario.fromJsonPerfil(data)
     }
 
     async modificarUsuario(usuario) {
-        return await axios.put(`${REST_SERVER_URL}/perfilDeUsuario/${usuario.id}`, usuario.toJSON())
+        return await axios.put(`${REST_SERVER_URL}/usuario/${usuario.id}`, usuario.toJSON())
     }
 
 }

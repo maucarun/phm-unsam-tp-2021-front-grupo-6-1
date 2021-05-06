@@ -1,19 +1,21 @@
-import React, { Component } from "react"
+import React, { Component, createRef } from "react"
 import { Card } from 'primereact/card'
 import "./login.css"
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { Password } from 'primereact/password'
 import { usuarioService } from '../services/usuario-service'
+import { Toast } from 'primereact/toast';
 
 export class Login extends Component {
+
+    toast = createRef()
+
     constructor(props) {
         super(props);
         this.state = {
             userName: '',
-            password: '',
-            error: false,
-            errorMessage: ''
+            password: ''
         };
     }
 
@@ -35,10 +37,9 @@ export class Login extends Component {
             usuarioService.userLogged = await usuarioService.loguearUsuario(jsonDataLogin)
             this.props.history.push('/busqueda')
         } catch (e) {
-            this.setState({
-                error: true,
-                errorMessage: e.response ? e.response.data : e.message
-            })
+            e.response ?
+                this.toast.current.show({ severity: 'error', summary: e.response.data.message, detail: e.message, life: 3000 })
+                : this.toast.current.show({ severity: 'error', summary: "Error de conexión", detail: e.message, life: 3000 })
         }
     }
 
@@ -60,10 +61,8 @@ export class Login extends Component {
                     <div className="p-p-4">
                         <Button className="p-button-lg p-component p-d-block p-mx-auto" label="Ingresar" onClick={this.loguearUsuario} data-testid="botonIngresar" />
                     </div>
-                    <div className="mensaje-error">
-                        {this.state.error && <span data-testid="mensajeError">{this.state.errorMessage}</span>}
-                    </div>
                 </Card>
+                <Toast ref={this.toast} />
             </div>
         );
     }
