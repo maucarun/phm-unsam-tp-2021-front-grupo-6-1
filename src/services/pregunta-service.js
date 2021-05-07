@@ -6,7 +6,7 @@ import { usuarioService } from "../services/usuario-service";
 class PreguntaService {
 
     async getPregunta(id) {
-        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/${id}`)
+        const { data } = await axios.get(`${REST_SERVER_URL}/pregunta/${id}`)
         return Pregunta.fromJson(data)
     }
 
