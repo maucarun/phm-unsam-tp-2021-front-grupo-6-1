@@ -1,11 +1,13 @@
 import Usuario from "../dominio/usuario";
 
 export default class Pregunta {
-  constructor(id, descripcion, opciones, autor, puntos, type) {
+  constructor(id, descripcion, opciones, nombreAutor, apellidoAutor, userNameAutor, puntos, type) {
     this.id = id
     this.descripcion = descripcion
     this.opciones = opciones
-    this.autor = new Usuario(autor)
+    this.nombreAutor = nombreAutor
+    this.apellidoAutor = apellidoAutor
+    this.userNameAutor = userNameAutor
     this.puntos = puntos
     this.type = type
   }

@@ -31,8 +31,8 @@ const Table = ({ history, match }) => {
         try {
             const preg = await preguntaService.getPregunta(match.params.id)
             setPregunta(preg)
-            setNombreAutor(preg.autor.nombre)
-            setApellidoAutor(preg.autor.apellido)
+            setNombreAutor(preg.nombreAutor)
+            setApellidoAutor(preg.apellidoAutor)
             convertirOpciones(preg.opciones)
         } catch (error) {
             toast.current.show({ severity: 'error', summary: 'Ocurrió un error al buscar la pregunta', detail: error.message, life: 5000 })
