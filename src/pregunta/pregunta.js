@@ -260,7 +260,7 @@ class PreguntaPage extends Component {
         return (
             <div className="preguntaBody">
                 {nueva && <span className="autor">Autor: {usuario.nombre + ' ' + usuario.apellido}</span>}
-                {!nueva && <span className="autor">Autor: {pregunta.nombreAutor} {pregunta.apellidoAutor}</span>}
+                {!nueva && <span className="autor">Autor: {pregunta.nombreApellidoAutor}</span>}
                 <section className="encabezado">
                     <div className="tituloPregunta">
                         <InputText className="descripcionPregunta" value={descripcion} onChange={(e) => this.setState({ descripcion: e.target.value })} />
