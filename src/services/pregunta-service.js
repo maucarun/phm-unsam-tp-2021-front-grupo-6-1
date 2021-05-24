@@ -35,6 +35,11 @@ class PreguntaService {
         return data.map(pregunta => Pregunta.fromJson(pregunta))
     }
 
+    async getPreguntasModificadas(idUser) {
+        const { data } = await axios.get(`${REST_SERVER_URL}/preguntas/all/modificadas/${idUser}`)
+        return data
+    }
+
     async actualizarPregunta(pregunta) {
         return await axios.put(`${REST_SERVER_URL}/pregunta/${pregunta.id}`, pregunta)
     }

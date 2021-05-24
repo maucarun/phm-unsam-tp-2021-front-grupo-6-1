@@ -9,6 +9,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
 import { Toast } from 'primereact/toast';
+import { preguntaService } from "../services/pregunta-service";
 
 class Perfil extends Component {
   
@@ -21,14 +22,19 @@ class Perfil extends Component {
       mostrarModal: false,
       noAmigos:[],
       noAmigoSeleccionado: null,
+      modificaciones : []
     };
   }
 
   async componentDidMount() {
     try {
       const usuario = await usuarioService.getUsuario(usuarioService.userLogged.id);
+      const modificaciones = await preguntaService.getPreguntasModificadas(usuarioService.userLogged.id)
       //console.dir(usuario)
       this.cambiarEstado(usuario);
+      this.setState({
+        modificaciones: modificaciones,
+      })
       } catch (e) {
         //this.addMessages(e)
       }
@@ -109,6 +115,10 @@ class Perfil extends Component {
     this.props.history.push('/busqueda')
   }
 
+  opciones(modificacion){
+    return modificacion.opcionesNew.join(", ")
+  }
+
   render() {
     return (
       <div className="card">
@@ -174,10 +184,24 @@ class Perfil extends Component {
 
         <section className="tabla-respuestas">
           <h3>Preguntas Respondidas</h3>
-          <DataTable value={this.state.usuario.respuestas} scrollable scrollHeight="100px">
+          <DataTable value={this.state.usuario.respuestas} scrollable scrollHeight="200px">
             <Column field="pregunta" header="Preguntas"></Column>
             <Column field="fechaRespuesta" header="Fecha de respuesta"></Column>
             <Column field="puntos" header="Puntos"></Column>
+          </DataTable>
+        </section>
+
+        <section className="tabla-respuestas">
+          <h3>Preguntas Modificadas</h3>
+          <DataTable value={this.state.modificaciones} scrollable scrollHeight="200px">
+            <Column field="fecha" header="Fecha Modificacion"></Column>
+            {/* <Column field="preguntaOld" header="pregunta vieja"></Column> */}
+            <Column field="preguntaNew" header="pregunta nueva"></Column>
+            {/* <Column field="respuestaCorrectaOld" header="Respuesta vieja"></Column> */}
+            <Column field="respuestaCorrectaNew" header="Respuesta nueva"></Column>
+            {/* <Column field="opcionesOld" header="Opciones vieja"></Column> */}
+            <Column body={this.opciones} header="Opciones actuales"></Column>
+
           </DataTable>
         </section>
 
