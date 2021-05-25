@@ -24,7 +24,7 @@ const Busqueda = ({history}) => {
     
     const seleccionarButton = (preguntaCell) => {
         return(
-            preguntaCell.autor.userName === usuarioService.userLogged.userName ?
+            preguntaCell.autorId === usuarioService.userLogged.id ?
             <Button className="p-button-rounded p-button-Primary" id="button-column" label="Editar" onClick={() => navegarAEdicion(preguntaCell.id)}/>
             :
             <Button className="p-button-rounded p-button-Primary" id="button-column" label="Responder" onClick={() => navegarAResponder(preguntaCell.id)}/>
