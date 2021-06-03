@@ -14,30 +14,30 @@ CREATE (riesgo2:Pregunta {descripcion: '¿Que es mas lento que piropo de tartamu
 CREATE (solidaria1:Pregunta {descripcion: 'Cocodrilo que durmio es...', tipo: 'solidaria', fechaDeCaducidad: '2021-08-15'})
 CREATE (solidaria2:Pregunta {descripcion: '¿Que es un coballo?', tipo: 'solidaria', fechaDeCaducidad: '2021-07-11'})
 
-CREATE (usuario1:Usuario {nombre: 'Pepe Palala'})
-CREATE (usuario2:Usuario {nombre: 'Manolo Palala'})
-CREATE (usuario3:Usuario {nombre: 'Pancho Rancho'})
-CREATE (usuario4:Usuario {nombre: 'Casandra Malandra'})
+CREATE (pepe:Usuario {nombre: 'Pepe Palala'})
+CREATE (manolo:Usuario {nombre: 'Manolo Palala'})
+CREATE (pancho:Usuario {nombre: 'Pancho Rancho'})
+CREATE (casandra:Usuario {nombre: 'Casandra Malandra'})
 
 CREATE 
-  (usuario1)-[:RESPONDIO {puntos: 10}]->(simple1),
-  (usuario4)-[:RESPONDIO {puntos: 10}]->(simple2),
-  (usuario2)-[:RESPONDIO {puntos: 100}]->(riesgo1),
-  (usuario3)-[:RESPONDIO {puntos: 100}]->(riesgo2),
-  (usuario2)-[:RESPONDIO {puntos: 50}]->(solidaria1),
-  (usuario4)-[:RESPONDIO {puntos: 70}]->(solidaria2),
-  (usuario3)-[:AUTOR]->(simple2),
-  (usuario1)-[:AUTOR]->(riesgo1),
-  (usuario3)-[:AUTOR]->(simple1),
-  (usuario4)-[:AUTOR]->(riesgo2),
-  (usuario3)-[:AUTOR]->(solidaria1),
-  (usuario1)-[:AUTOR]->(solidaria2),
-  (usuario1)-[:AMIGO]->(usuario2),
-  (usuario1)-[:AMIGO]->(usuario3),
-  (usuario2)-[:AMIGO]->(usuario3),
-  (usuario2)-[:AMIGO]->(usuario4),
-  (usuario3)-[:AMIGO]->(usuario1),
-  (usuario4)-[:AMIGO]->(usuario3),
+  (pepe)-[:RESPONDIO {puntos: 10}]->(simple1),
+  (casandra)-[:RESPONDIO {puntos: 10}]->(simple2),
+  (manolo)-[:RESPONDIO {puntos: 100}]->(riesgo1),
+  (pancho)-[:RESPONDIO {puntos: 100}]->(riesgo2),
+  (manolo)-[:RESPONDIO {puntos: 50}]->(solidaria1),
+  (casandra)-[:RESPONDIO {puntos: 70}]->(solidaria2),
+  (pancho)-[:AUTOR]->(simple2),
+  (pepe)-[:AUTOR]->(riesgo1),
+  (pancho)-[:AUTOR]->(simple1),
+  (casandra)-[:AUTOR]->(riesgo2),
+  (pancho)-[:AUTOR]->(solidaria1),
+  (pepe)-[:AUTOR]->(solidaria2),
+  (pepe)-[:AMIGO]->(manolo),
+  (pepe)-[:AMIGO]->(pancho),
+  (manolo)-[:AMIGO]->(pancho),
+  (manolo)-[:AMIGO]->(casandra),
+  (pancho)-[:AMIGO]->(pepe),
+  (casandra)-[:AMIGO]->(pancho)
 
 // esta query me trae los amigos de Pancho Rancho
 match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Pancho Rancho'}) 
@@ -71,6 +71,11 @@ match(usuario:Usuario {nombre: 'Pancho Rancho'})
 where not (usuario)-[:RESPONDIO]->(pregunta) 
 and pregunta.fechaDeCaducidad > '2021-06-02' 
 return pregunta, usuario;
+
+// amigos de los amigos de pancho
+match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Pancho Rancho'}) 
+match(usuario)-[:AMIGO]->(otro:Usuario)
+return (otro)
 
 CREATE (ivanlisas:Alumne { nombre: 'Lisas Ivan', usuarioGithub: 'IvanLisas'})
 CREATE (edipietro:Alumne { nombre: 'Di Pietro Estefanía', usuarioGithub: 'edipietro'})
