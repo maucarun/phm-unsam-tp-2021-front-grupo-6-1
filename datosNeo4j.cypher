@@ -39,8 +39,38 @@ CREATE
   (usuario3)-[:AMIGO]->(usuario1),
   (usuario4)-[:AMIGO]->(usuario3),
 
+// esta query me trae los amigos de Pancho Rancho
+match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Pancho Rancho'}) 
+return (usuario)
 
+// Borrar todo el grafo
+MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n, r
 
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE NOT (p)-[:DIRECTED]->()
+RETURN p,m
+
+// preguntas respondidas por pancho
+match (pregunta:Pregunta)<-[:RESPONDIO]-(usuario:Usuario {nombre: 'Pancho Rancho'}) 
+return pregunta, usuario;
+
+// las preguntas con fecha de caducidad mayor a la de hoy
+match(pregunta:Pregunta) 
+where pregunta.fechaDeCaducidad > '2021-06-02' 
+return pregunta;
+
+// preguntas no respondidas por pancho
+match(pregunta:Pregunta) 
+match(usuario:Usuario {nombre: 'Pancho Rancho'}) 
+where not (usuario)-[:RESPONDIO]->(pregunta) 
+return pregunta, usuario;
+
+// preguntas no respondidas por pancho y con fecha de caducidad mayor a la de hoy
+match(pregunta:Pregunta) 
+match(usuario:Usuario {nombre: 'Pancho Rancho'}) 
+where not (usuario)-[:RESPONDIO]->(pregunta) 
+and pregunta.fechaDeCaducidad > '2021-06-02' 
+return pregunta, usuario;
 
 CREATE (ivanlisas:Alumne { nombre: 'Lisas Ivan', usuarioGithub: 'IvanLisas'})
 CREATE (edipietro:Alumne { nombre: 'Di Pietro Estefanía', usuarioGithub: 'edipietro'})
@@ -101,3 +131,5 @@ CREATE
 // Relación cursa en la planilla de alumnes
 // Planilla cursada
 // =CONCATENATE("(", LOWER(D2), ")-[:CURSA {grupo: ", F2, ", entrega1: '", H2, "'}]->(phm)")
+
+//DETACH DELETE
