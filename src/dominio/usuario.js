@@ -27,8 +27,8 @@ export default class Usuario {
     return Object.assign(new Usuario(), usuarioJSON)
   }
 
-  static fromJsonPerfil(usuarioJSON, respuestasJSON) {
-    return Object.assign(new Usuario(), usuarioJSON, { fechaDeNacimiento: convertirADate(usuarioJSON.fechaDeNacimiento) }, { respuestas: respuestasJSON })
+  static fromJsonPerfil(usuarioJSON) {
+    return Object.assign(new Usuario(), usuarioJSON, { fechaDeNacimiento: convertirADate(usuarioJSON.fechaDeNacimiento) })
   }
 
   toJSON() {

@@ -12,7 +12,7 @@ class UsuarioService {
 
     async getUsuario(id) {
         const { data } = await axios.get(`${REST_SERVER_URL}/usuario/${id}`)
-        return Usuario.fromJsonPerfil(data.usuario, data.respuestas)
+        return Usuario.fromJsonPerfil(data)
     }
 
     async actualizarUsuario(userId, preguntaId, opcionJson) {
