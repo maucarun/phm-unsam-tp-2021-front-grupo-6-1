@@ -18,6 +18,12 @@ CREATE (pepe:Usuario {nombre: 'Pepe Palala'})
 CREATE (manolo:Usuario {nombre: 'Manolo Palala'})
 CREATE (pancho:Usuario {nombre: 'Pancho Rancho'})
 CREATE (casandra:Usuario {nombre: 'Casandra Malandra'})
+CREATE (facu:Usuario {nombre: 'Facundo Sacchi'})
+CREATE (elena:Usuario {nombre: 'Elena Melena'})
+CREATE (harry:Usuario {nombre: 'Harry Potter'})
+CREATE (pato:Usuario {nombre: 'Pato Donald'})
+CREATE (mickey:Usuario {nombre: 'Mickey Mouse'})
+CREATE (duffy:Usuario {nombre: 'Duffy Duf'})
 
 CREATE 
   (pepe)-[:RESPONDIO {puntos: 10}]->(simple1),
@@ -32,15 +38,33 @@ CREATE
   (casandra)-[:AUTOR]->(riesgo2),
   (pancho)-[:AUTOR]->(solidaria1),
   (pepe)-[:AUTOR]->(solidaria2),
+
   (pepe)-[:AMIGO]->(manolo),
   (pepe)-[:AMIGO]->(pancho),
   (manolo)-[:AMIGO]->(pancho),
   (manolo)-[:AMIGO]->(casandra),
   (pancho)-[:AMIGO]->(pepe),
-  (casandra)-[:AMIGO]->(pancho)
+  (casandra)-[:AMIGO]->(pancho),
+  (facu)-[:AMIGO]->(manolo),
+  (elena)-[:AMIGO]->(facu),
+  (elena)-[:AMIGO]->(casandra),
+  (harry)-[:AMIGO]->(elena),
+  (pato)-[:AMIGO]->(mickey),
+  (mickey)-[:AMIGO]->(pato),
+  (duffy)-[:AMIGO]->(pato),
+  (duffy)-[:AMIGO]->(mickey),
+  (duffy)-[:AMIGO]->(pepe),
+  (duffy)-[:AMIGO]->(casandra),
+  (manolo)-[:AMIGO]->(duffy),
+  (duffy)-[:AMIGO]->(facu),
+  (pato)-[:AMIGO]->(facu),
+  (harry)-[:AMIGO]->(facu),
+  (facu)-[:AMIGO]->(duffy)
 
-// esta query me trae los amigos de Pancho Rancho
-match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Pancho Rancho'}) 
+//  duffy, pato, harry, elena :::: facu, manolo, duffy, mickey, harry
+
+// esta query me trae los amigos de facu
+match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Facundo Sacchi'}) 
 return (usuario)
 
 // Borrar todo el grafo
@@ -72,8 +96,9 @@ where not (usuario)-[:RESPONDIO]->(pregunta)
 and pregunta.fechaDeCaducidad > '2021-06-02' 
 return pregunta, usuario;
 
-// amigos de los amigos de pancho
-match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Pancho Rancho'}) 
+// 
+match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Facundo Sacchi'}) 
+with usuario
 match(usuario)-[:AMIGO]->(otro:Usuario)
 return (otro)
 
