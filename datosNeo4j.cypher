@@ -13,6 +13,7 @@ CREATE (riesgo1:Pregunta {descripcion: 'Mas vale pajaro en mano que...', tipo: '
 CREATE (riesgo2:Pregunta {descripcion: '¿Que es mas lento que piropo de tartamudo?', tipo: 'riesgo', fechaDeCaducidad: '2021-06-03'})
 CREATE (solidaria1:Pregunta {descripcion: 'Cocodrilo que durmio es...', tipo: 'solidaria', fechaDeCaducidad: '2021-08-15'})
 CREATE (solidaria2:Pregunta {descripcion: '¿Que es un coballo?', tipo: 'solidaria', fechaDeCaducidad: '2021-07-11'})
+CREATE (solidaria3:Pregunta {descripcion: '¿De que color es el cielo?', tipo: 'solidaria', fechaDeCaducidad: '2021-12-05'})
 
 CREATE (pepe:Usuario {nombre: 'Pepe Palala'})
 CREATE (manolo:Usuario {nombre: 'Manolo Palala'})
@@ -32,13 +33,15 @@ CREATE
   (pancho)-[:RESPONDIO {puntos: 100}]->(riesgo2),
   (manolo)-[:RESPONDIO {puntos: 50}]->(solidaria1),
   (casandra)-[:RESPONDIO {puntos: 70}]->(solidaria2),
+  (pancho)-[:RESPONDIO {puntos: 65}]->(solidaria3)
+CREATE
   (pancho)-[:AUTOR]->(simple2),
   (pepe)-[:AUTOR]->(riesgo1),
   (pancho)-[:AUTOR]->(simple1),
   (casandra)-[:AUTOR]->(riesgo2),
   (pancho)-[:AUTOR]->(solidaria1),
-  (pepe)-[:AUTOR]->(solidaria2),
-
+  (pepe)-[:AUTOR]->(solidaria2)
+CREATE
   (pepe)-[:AMIGO]->(manolo),
   (pepe)-[:AMIGO]->(pancho),
   (manolo)-[:AMIGO]->(pancho),
@@ -61,46 +64,41 @@ CREATE
   (harry)-[:AMIGO]->(facu),
   (facu)-[:AMIGO]->(duffy)
 
-//  duffy, pato, harry, elena :::: facu, manolo, duffy, mickey, harry
-
-// esta query me trae los amigos de facu
-match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Facundo Sacchi'}) 
-return (usuario)
-
 // Borrar todo el grafo
 MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n, r
 
-MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
-WHERE NOT (p)-[:DIRECTED]->()
-RETURN p,m
-
-// preguntas respondidas por pancho
-match (pregunta:Pregunta)<-[:RESPONDIO]-(usuario:Usuario {nombre: 'Pancho Rancho'}) 
-return pregunta, usuario;
-
-// las preguntas con fecha de caducidad mayor a la de hoy
-match(pregunta:Pregunta) 
-where pregunta.fechaDeCaducidad > '2021-06-02' 
-return pregunta;
-
-// preguntas no respondidas por pancho
-match(pregunta:Pregunta) 
-match(usuario:Usuario {nombre: 'Pancho Rancho'}) 
-where not (usuario)-[:RESPONDIO]->(pregunta) 
-return pregunta, usuario;
-
-// preguntas no respondidas por pancho y con fecha de caducidad mayor a la de hoy
+// query 1b
 match(pregunta:Pregunta) 
 match(usuario:Usuario {nombre: 'Pancho Rancho'}) 
 where not (usuario)-[:RESPONDIO]->(pregunta) 
 and pregunta.fechaDeCaducidad > '2021-06-02' 
 return pregunta, usuario;
 
-// 
-match (usuario: Usuario)-[:AMIGO]->(user:Usuario {nombre: 'Facundo Sacchi'}) 
-with usuario
-match(usuario)-[:AMIGO]->(otro:Usuario)
-return (otro)
+// amigos de los amigos que no son propios
+match (user:Usuario {nombre: 'Facundo Sacchi'})-[:AMIGO]->(ami:Usuario)-[:AMIGO]->(otro:Usuario) where not (otro)-[:AMIGO]->(user)
+return otro;
+
+// query 2a
+match (pregunta:Pregunta {tipo:'solidaria'})
+match (user:Usuario {nombre: 'Manolo Palala'})-[:AMIGO]->(amigo:Usuario)
+where not (user)-[:RESPONDIO]->(pregunta) and (amigo)-[:RESPONDIO]->(pregunta) return pregunta;
+
+// query 2b
+match (user:Usuario)-[:AUTOR]->(pregunta:Pregunta) 
+match (us:Usuario)-[resp:RESPONDIO]->(pregunta)
+where resp.puntos > 50  
+return user;
+
+// MATCH (usuario:Usuario{nombre:"Juan"})-[:AMIGO*2..4]->(posibleAmigos)
+
+
+
+
+
+
+
+
+
 
 CREATE (ivanlisas:Alumne { nombre: 'Lisas Ivan', usuarioGithub: 'IvanLisas'})
 CREATE (edipietro:Alumne { nombre: 'Di Pietro Estefanía', usuarioGithub: 'edipietro'})
