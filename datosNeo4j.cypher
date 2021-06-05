@@ -67,16 +67,18 @@ CREATE
 // Borrar todo el grafo
 MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n, r
 
+// query 1a
+match (user:Usuario {nombre: 'Facundo Sacchi'})-[:AMIGO]->(ami:Usuario)-[:AMIGO]->(otro:Usuario) 
+where not (otro)-[:AMIGO]->(user)
+and not (otro)-[:AUTOR]->()
+return otro;
+
 // query 1b
 match(pregunta:Pregunta) 
 match(usuario:Usuario {nombre: 'Pancho Rancho'}) 
 where not (usuario)-[:RESPONDIO]->(pregunta) 
 and pregunta.fechaDeCaducidad > '2021-06-02' 
 return pregunta, usuario;
-
-// amigos de los amigos que no son propios
-match (user:Usuario {nombre: 'Facundo Sacchi'})-[:AMIGO]->(ami:Usuario)-[:AMIGO]->(otro:Usuario) where not (otro)-[:AMIGO]->(user)
-return otro;
 
 // query 2a
 match (pregunta:Pregunta {tipo:'solidaria'})
