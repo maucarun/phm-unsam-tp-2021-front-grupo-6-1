@@ -5,8 +5,6 @@ AMIGOS -> relacion entre Usuarios
 AUTOR -> relacion entre Usuario y Pregunta
 RESPONDIO -> relacion entre Usuario y Pregunta: puntos
 
-
-
 CREATE (simple1:Pregunta {descripcion: '¿Cuantas provincias tiene Argentina?', tipo: 'simple', fechaDeCaducidad: '2021-05-05'})
 CREATE (simple2:Pregunta {descripcion: 'Hamlet es una obra de...', tipo: 'simple', fechaDeCaducidad: '2021-03-17'})
 CREATE (riesgo1:Pregunta {descripcion: 'Mas vale pajaro en mano que...', tipo: 'riesgo', fechaDeCaducidad: '2021-07-09'})
@@ -28,11 +26,14 @@ CREATE (duffy:Usuario {nombre: 'Duffy Duf'})
 
 CREATE 
   (pepe)-[:RESPONDIO {puntos: 10}]->(simple1),
+  (casandra)-[:RESPONDIO {puntos: 10}]->(simple1),
   (casandra)-[:RESPONDIO {puntos: 10}]->(simple2),
-  (manolo)-[:RESPONDIO {puntos: 100}]->(riesgo1),
-  (pancho)-[:RESPONDIO {puntos: 100}]->(riesgo2),
-  (manolo)-[:RESPONDIO {puntos: 50}]->(solidaria1),
   (casandra)-[:RESPONDIO {puntos: 70}]->(solidaria2),
+  (manolo)-[:RESPONDIO {puntos: 10}]->(simple1),
+  (manolo)-[:RESPONDIO {puntos: 100}]->(riesgo1),
+  (manolo)-[:RESPONDIO {puntos: 50}]->(solidaria1),
+  (pancho)-[:RESPONDIO {puntos: 10}]->(simple1),
+  (pancho)-[:RESPONDIO {puntos: 100}]->(riesgo2),
   (pancho)-[:RESPONDIO {puntos: 65}]->(solidaria3)
 CREATE
   (pancho)-[:AUTOR]->(simple2),
@@ -90,6 +91,20 @@ match (user:Usuario)-[:AUTOR]->(pregunta:Pregunta)
 match (us:Usuario)-[resp:RESPONDIO]->(pregunta)
 where resp.puntos > 50  
 return user;
+
+// Integrante 3
+
+// Saber quienes respondieron las mismas preguntas que yo.
+
+match (yo:Usuario {nombre:"Pepe Palala"})-[:RESPONDIO]->(preguntasPepe:Pregunta) 
+match(usuario:Usuario)-[:RESPONDIO]-(preguntas:Pregunta)
+where yo <> usuario and preguntasPepe = preguntas
+return usuario
+
+// Saber a qué tipo de preguntas respondió un usuario.
+
+match (usuario:Usuario{nombre:"Casandra Malandra"})-[:RESPONDIO]->(pregunta:Pregunta) 
+return pregunta.tipo, COUNT(pregunta.tipo) as cantidad
 
 // MATCH (usuario:Usuario{nombre:"Juan"})-[:AMIGO*2..4]->(posibleAmigos)
 
