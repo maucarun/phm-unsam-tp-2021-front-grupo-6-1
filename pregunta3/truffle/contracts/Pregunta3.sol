@@ -33,10 +33,28 @@ contract Pregunta3 {
     {
         for (uint256 i = 0; i < preguntas.length; i++) {
             if (preguntas[i].idPregunta == idPregunta) {
-                pregunta = preguntas[i];
-                //return pregunta;
+                return pregunta;
             }
         }
+    }
+
+    //  Se debe poder agregar una nueva pregunta indicando su autor (el
+    // ingresante), el texto y las opciones.
+    /* 
+    //function crearPregunta -> pregunta: address (autor), texto, opciones (array?), opcionCorrecta
+    function crearPregunta(address _autor, string _texto, string[] memory _opciones, string _opcionCorrecta) public {
+        preguntas.push(Pregunta({
+            autor: _autor,
+            texto: _texto,
+            opciones: _opciones,
+            opcionCorrecta: _opcionCorrecta
+        }));
+    } 
+    */
+
+    function crearPregunta(string memory texto, string[]  memory opciones, string  memory opcionCorrecta) public {
+        Pregunta memory nuevaPregunta = Pregunta(1,0xf01a8037456D9c5bcc9DBf06E88fF44d9D48017A,texto,opciones, opcionCorrecta);
+        preguntas.push(nuevaPregunta);
     }
 
     function getPreguntas()
@@ -57,10 +75,6 @@ contract Pregunta3 {
         respuestas.push(respuesta);
     }
 
-    //function crearPregunta -> pregunta: address (autor), texto, opciones (array?), opcionCorrecta
-    function crearPregunta(Pregunta memory pregunta) public {
-        preguntas.push(pregunta);
-    }
     /* 
     function crearPregunta(address _autor, string _texto, string[] memory _opciones, string _opcionCorrecta) public {
         preguntas.push(Pregunta({
