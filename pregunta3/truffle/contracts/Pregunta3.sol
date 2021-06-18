@@ -1,8 +1,9 @@
-pragma solidity >=0.5.16;
-pragma experimental ABIEncoderV2;
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
 
 contract Pregunta3 {
-    // ¿como se calcula el puntaje al responder?
+    // semilla:ritual tip pudding smoke access tide peasant iron twelve dignity tornado run
 
     //function promedioPuntaje -> address
     //function cambiarEstado -> address, estadoNuevo
