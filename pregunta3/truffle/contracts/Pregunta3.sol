@@ -3,8 +3,6 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract Pregunta3 {
-    // semilla:ritual tip pudding smoke access tide peasant iron twelve dignity tornado run
-
     //function promedioPuntaje -> address
     //function cambiarEstado -> address, estadoNuevo
     //require cambiarEstado -> Solo el creador puede cambiar el estado del smart contract
@@ -73,3 +71,6 @@ contract Pregunta3 {
     } 
     */
 }
+
+//semilla:ritual tip pudding smoke access tide peasant iron twelve dignity tornado run
+//preguntasInstance.crearPregunta({"idPregunta": 1, "autor": "0x44026F6C64C2c98Ae7D4FbC15B20ae730B52AC8C", "texto": "prueba", "opciones": ["prueba1","prueba2"], "opcionCorrecta": "prueba2"})
