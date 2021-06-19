@@ -22,8 +22,14 @@ contract Pregunta3 {
         uint256 puntaje;
     }
 
+    struct Usuario {
+        address id;
+        Respuesta[] respuestas;
+    }
+
     Pregunta[] public preguntas;
     Respuesta[] public respuestas;
+    Usuario [] public usuarios;
 
     uint256 idIncremental = 0;
 
@@ -38,14 +44,6 @@ contract Pregunta3 {
                 //return pregunta;
             }
         }
-    }
-
-    function getPreguntas()
-        public
-        view
-        returns (Pregunta[] memory listaPreguntas)
-    {
-        listaPreguntas = preguntas;
     }
 
     //function responder -> address (del que responde), respuesta: idPregunta, opcion, puntaje
@@ -65,6 +63,21 @@ contract Pregunta3 {
     }
 
     function getId() private returns(uint) { return ++idIncremental; }
+
+    // Un usuario debe poder obtener el promedio aproximado de los puntajes de todas las respuestas que él hizo. 
+    // Esto debe al menos contar con precisión entera (no es necesario calcular con decimales).
+    function promedio(Usuario memory usuario) public pure returns (uint) {
+        Respuesta[] memory respuestasUsuario = usuario.respuestas;
+        uint puntos = 0;
+
+        for (uint256 i = 0; i < respuestasUsuario.length; i++) {
+            Respuesta memory respuesta = respuestasUsuario[i];
+            puntos += respuesta.puntaje;
+        }
+
+        return puntos / respuestasUsuario.length;
+    }
+
     /* 
     function crearPregunta(address _autor, string _texto, string[] memory _opciones, string _opcionCorrecta) public {
         preguntas.push(Pregunta({
@@ -75,6 +88,13 @@ contract Pregunta3 {
         }));
     } 
     */
+    // function getPreguntas()
+    //     public
+    //     view
+    //     returns (Pregunta[] memory listaPreguntas)
+    // {
+    //     listaPreguntas = preguntas;
+    // }
 }
 
 //semilla:ritual tip pudding smoke access tide peasant iron twelve dignity tornado run
