@@ -3,6 +3,8 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract Pregunta3 {
+
+    Estado estado = Estado.ACTIVO;
     //function promedioPuntaje -> address
     //function cambiarEstado -> address, estadoNuevo
     //require cambiarEstado -> Solo el creador puede cambiar el estado del smart contract
@@ -76,6 +78,13 @@ contract Pregunta3 {
         }
 
         return puntos / respuestasUsuario.length;
+    }
+
+    enum Estado {
+        ACTIVO,
+        LECTURA,
+        RESPONDER,
+        BOOTSTRAP
     }
 
     /* 
