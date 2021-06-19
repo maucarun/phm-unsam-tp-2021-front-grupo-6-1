@@ -25,6 +25,8 @@ contract Pregunta3 {
     Pregunta[] public preguntas;
     Respuesta[] public respuestas;
 
+    uint256 idIncremental = 0;
+
     function getPreguntaById(uint256 idPregunta)
         public
         view
@@ -58,8 +60,11 @@ contract Pregunta3 {
 
     //function crearPregunta -> pregunta: address (autor), texto, opciones (array?), opcionCorrecta
     function crearPregunta(Pregunta memory pregunta) public {
+        pregunta.idPregunta = getId();
         preguntas.push(pregunta);
     }
+
+    function getId() private returns(uint) { return ++idIncremental; }
     /* 
     function crearPregunta(address _autor, string _texto, string[] memory _opciones, string _opcionCorrecta) public {
         preguntas.push(Pregunta({
