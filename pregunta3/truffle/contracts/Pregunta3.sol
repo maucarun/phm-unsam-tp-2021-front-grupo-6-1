@@ -114,9 +114,9 @@ contract Pregunta3 {
     //function promedioPuntaje -> address
     // Un usuario debe poder obtener el promedio aproximado de los puntajes de todas las respuestas que él hizo.
     // Esto debe al menos contar con precisión entera (no es necesario calcular con decimales).
-    /* 
-    function promedio(Usuario memory usuario) public pure returns (uint256) {
-        Respuesta[] memory respuestasUsuario = usuario.respuestas;
+    
+    function promedio(address idUsuario) public view returns (uint256) {
+        Respuesta[] memory respuestasUsuario = usuario[idUsuario];
         uint256 puntos = 0;
 
         for (uint256 i = 0; i < respuestasUsuario.length; i++) {
@@ -126,7 +126,7 @@ contract Pregunta3 {
 
         return puntos / respuestasUsuario.length;
     } 
-    */
+    
 
 
     /* 
