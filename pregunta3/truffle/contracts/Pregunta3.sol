@@ -31,6 +31,13 @@ contract Pregunta3 {
         uint256 puntaje;
     }
 
+    /* 
+    ACTIVO toda la funcionalidad habilitada.
+    LECTURA sólo se pueden consultar preguntas existentes.
+    RESPONDER sólo se permite consultar y responder preguntas, pero no crear nuevas.
+    BOOTSTRAP sólo se permite crear nuevas preguntas. 
+    */
+
     modifier verificarEstado(Estado _estado) {
         require(estado != _estado, "Estado invalido");
         _;
