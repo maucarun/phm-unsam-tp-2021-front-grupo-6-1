@@ -37,7 +37,7 @@ contract Pregunta3 {
     }
 
     function cambiarEstado(Estado _estado) public { 
-        require(msg.sender == duenio);
+        require(msg.sender == duenio, "Solo se puede cambiar estado si sos el duenio del contrato");
         estado = _estado;
     }
 
