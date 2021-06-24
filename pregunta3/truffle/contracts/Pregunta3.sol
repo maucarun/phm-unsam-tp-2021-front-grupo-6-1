@@ -3,13 +3,13 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract Pregunta3 {
-    address duenio = 0x44026F6C64C2c98Ae7D4FbC15B20ae730B52AC8C;
-    uint256 idIncremental = 0;
+    address public duenio = 0x44026F6C64C2c98Ae7D4FbC15B20ae730B52AC8C;
     Estado public estado = Estado.ACTIVO;
+    uint256 idIncremental = 0;
 
-    Pregunta[] public preguntas;
+    mapping(uint256 => Pregunta) public preguntas;
 
-    mapping(address => Respuesta[]) public usuario;
+    mapping(address => Respuesta[]) public respuestas;
 
     enum Estado {
         ACTIVO,
@@ -19,7 +19,6 @@ contract Pregunta3 {
     }
 
     struct Pregunta {
-        uint256 idPregunta;
         address autor;
         string texto;
         string[] opciones;
@@ -63,12 +62,10 @@ contract Pregunta3 {
     } 
     */
 
-    function verificarEstado(Estado _estado) public view {
+    function verificarEstado(Estado _estado) private view {
         require(estado != _estado, "Estado invalido");
     }
 
-    //function cambiarEstado -> address, estadoNuevo
-    //require cambiarEstado -> Solo el creador puede cambiar el estado del smart contract
     function cambiarEstado(Estado _estado) public { 
         require(msg.sender == duenio);
         estado = _estado;
@@ -76,14 +73,14 @@ contract Pregunta3 {
 
     function getPreguntaById(uint256 idPregunta) public view returns (Pregunta memory pregunta) {
         verificarEstado(Estado.BOOTSTRAP);
-        for (uint256 i = 0; i < preguntas.length; i++) {
-            if (preguntas[i].idPregunta == idPregunta) {
-                pregunta = preguntas[i];
-            }
-        }
+        //for (uint256 i = 0; i < preguntas.length; i++) {
+            //if (preguntas[i].idPregunta == idPregunta) {
+               // pregunta = preguntas[i];
+           // }
+       // }
+       pregunta = preguntas[idPregunta];
     }
 
-    //function responder -> address (del que responde), respuesta: idPregunta, opcion, puntaje
     function responder(Respuesta memory respuesta) public {
         verificarEstado(Estado.BOOTSTRAP);
         verificarEstado(Estado.LECTURA);
@@ -92,43 +89,36 @@ contract Pregunta3 {
             msg.sender != pregunta.autor,
             "No se puede responder una pregunta propia"
         );
-        usuario[msg.sender].push(respuesta);
+        respuestas[msg.sender].push(respuesta);
     }
 
-    //function crearPregunta -> pregunta: address (autor), texto, opciones (array?), opcionCorrecta
     function crearPregunta(Pregunta memory pregunta) public {
         verificarEstado(Estado.LECTURA);
         verificarEstado(Estado.RESPONDER);
-        pregunta.idPregunta = getId();
-        preguntas.push(pregunta);
+        preguntas[getId()] = pregunta;
     }
 
     function getId() private returns (uint256) {
         return ++idIncremental;
     }
 
-    function getRespuestasByAddress(address idUsuario) private view returns (Respuesta[] memory respuestas){
-        respuestas = usuario[idUsuario];
+    function getRespuestasByAddress(address idUsuario) public view returns (Respuesta[] memory listaRespuestas){
+        listaRespuestas = respuestas[idUsuario];
     }
 
-    //function promedioPuntaje -> address
-    // Un usuario debe poder obtener el promedio aproximado de los puntajes de todas las respuestas que él hizo.
-    // Esto debe al menos contar con precisión entera (no es necesario calcular con decimales).
-    
-    function promedio(address idUsuario) public view returns (uint256) {
-        Respuesta[] memory respuestasUsuario = usuario[idUsuario];
+    function promedio() public view returns (uint256){
+        Respuesta[] memory respuestasUsuario = respuestas[msg.sender];
         uint256 puntos = 0;
+        uint256 cantidadRespuestas = respuestasUsuario.length;
 
-        for (uint256 i = 0; i < respuestasUsuario.length; i++) {
+        for (uint256 i = 0; i < cantidadRespuestas; i++) {
             Respuesta memory respuesta = respuestasUsuario[i];
             puntos += respuesta.puntaje;
         }
 
-        return puntos / respuestasUsuario.length;
+        return (puntos / cantidadRespuestas);
     } 
     
-
-
     /* 
     function crearPregunta(address _autor, string _texto, string[] memory _opciones, string _opcionCorrecta) public {
         preguntas.push(Pregunta({
