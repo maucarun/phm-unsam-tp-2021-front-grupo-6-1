@@ -30,40 +30,10 @@ contract Pregunta3 {
         string opcion;
         uint256 puntaje;
     }
-    
-    /* 
-    ACTIVO toda la funcionalidad habilitada.
-    LECTURA sólo se pueden consultar preguntas existentes.
-    RESPONDER sólo se permite consultar y responder preguntas, pero no crear nuevas.
-    BOOTSTRAP sólo se permite crear nuevas preguntas. 
-     
-    modifier verificarEstado(Estado memory _estado) {
-        require(estado == _estado);
-        _;
-    } 
-    modifier alResponder() {
-        require(estado != Estado.BOOTSTRAP && estado != Estado.LECTURA);
-        _;
-    }
 
-    modifier consultarPreguntas() {
-        require(estado != Estado.BOOTSTRAP);
-        _;
-    }
-
-    modifier consultarRespuestas() {
-        require(estado != Estado.BOOTSTRAP && estado != Estado.RESPONDER);
-        _;
-    }
-
-    modifier generarPregunta() {
-        require(estado != Estado.LECTURA && estado != Estado.RESPONDER);
-        _;
-    } 
-    */
-
-    function verificarEstado(Estado _estado) private view {
+    modifier verificarEstado(Estado _estado) {
         require(estado != _estado, "Estado invalido");
+        _;
     }
 
     function cambiarEstado(Estado _estado) public { 
@@ -71,8 +41,7 @@ contract Pregunta3 {
         estado = _estado;
     }
 
-    function getPreguntaById(uint256 idPregunta) public view returns (Pregunta memory pregunta) {
-        verificarEstado(Estado.BOOTSTRAP);
+    function getPreguntaById(uint256 idPregunta) public view verificarEstado(Estado.BOOTSTRAP) returns (Pregunta memory pregunta) {
         //for (uint256 i = 0; i < preguntas.length; i++) {
             //if (preguntas[i].idPregunta == idPregunta) {
                // pregunta = preguntas[i];
@@ -81,9 +50,7 @@ contract Pregunta3 {
        pregunta = preguntas[idPregunta];
     }
 
-    function responder(Respuesta memory respuesta) public {
-        verificarEstado(Estado.BOOTSTRAP);
-        verificarEstado(Estado.LECTURA);
+    function responder(Respuesta memory respuesta) public verificarEstado(Estado.BOOTSTRAP) verificarEstado(Estado.LECTURA) {
         Pregunta memory pregunta = getPreguntaById(respuesta.idPregunta);
         require(
             msg.sender != pregunta.autor,
@@ -92,9 +59,7 @@ contract Pregunta3 {
         respuestas[msg.sender].push(respuesta);
     }
 
-    function crearPregunta(Pregunta memory pregunta) public {
-        verificarEstado(Estado.LECTURA);
-        verificarEstado(Estado.RESPONDER);
+    function crearPregunta(Pregunta memory pregunta) public verificarEstado(Estado.LECTURA) verificarEstado(Estado.RESPONDER) {
         preguntas[getId()] = pregunta;
     }
 
@@ -119,18 +84,4 @@ contract Pregunta3 {
         return (puntos / cantidadRespuestas);
     } 
     
-    /* 
-    function crearPregunta(address _autor, string _texto, string[] memory _opciones, string _opcionCorrecta) public {
-        preguntas.push(Pregunta({
-            autor: _autor,
-            texto: _texto,
-            opciones: _opciones,
-            opcionCorrecta: _opcionCorrecta
-        }));
-    } 
-    
-    function getPreguntas() public view returns (Pregunta[] memory listaPreguntas) {
-        listaPreguntas = preguntas;
-    }
-    */
 }
